@@ -27,11 +27,16 @@ const getFun = async (cid) => {
     return data;
 };
 
-export const getContent = (cids) => {
+export const getContent = async (cids) => {
     const res = [];
     cids.forEach(async (cid) => {
         let t = await getFun(cid);
-        res.push(...t);
+        if (t) {
+            res.push({
+                cid: cid,
+                files: t,
+            });
+        }
     });
     return res;
 };

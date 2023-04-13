@@ -9,6 +9,7 @@ import Navbar from "@/components/navbar";
 export default function Home() {
     const [selectedFile, setSelectedFile] = useState([]);
     const [uploadedFiles, setuploadedFles] = useState([]);
+    const [state, setState] = useState(false);
 
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState();
@@ -51,9 +52,14 @@ export default function Home() {
             const contract = new Contract(address, abi, provider);
             const signer = await provider.getSigner();
             const data = await contract.getCids(await signer.getAddress());
-            const file = getContent(data);
+            const file = await getContent(data);
+            setState(false);
             console.log(file);
+            console.log(file.length);
             setuploadedFles(file);
+            setTimeout(() => {
+                setState(true);
+            }, 1000);
         } catch (err) {
             console.log(err);
         }
@@ -87,7 +93,6 @@ export default function Home() {
                 );
                 console.log(status);
                 setSelectedFile([]);
-                await getUserCids();
             } catch (err) {
                 console.log(err);
             }
@@ -105,7 +110,10 @@ export default function Home() {
                     walletConnected={walletConnected}
                     currentAccount={walletAddress}
                     connectWallet={connectWallet}
-                    disconnect={(x) => setWalletConnected(x)}
+                    disconnect={(x) => {
+                        setWalletConnected(x);
+                        setState(x);
+                    }}
                 />
             </div>
 
@@ -173,28 +181,22 @@ export default function Home() {
                 </button>
             </div>
 
-            {/* get element */}
+            {/* refresh element */}
 
             <div>
                 <button
-                    onClick={() => {
-                        // const data = await getContent(
-                        //     "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
-                        // );
-                        // updateFiles(data);
-                        console.log(uploadedFiles);
-                    }}
+                    onClick={getUserCids}
                     type="submit"
                     className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                     font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
                 >
-                    get
+                    refresh
                 </button>
             </div>
 
             {/* display files that have been uploaded */}
 
-            {uploadedFiles &&
+            {state &&
                 uploadedFiles.map((file, i) => (
                     <a
                         key={i}
@@ -202,7 +204,7 @@ export default function Home() {
                         target="_blank"
                         className="block"
                     >
-                        {file.name}
+                        {file.cid}
                     </a>
                 ))}
         </>
