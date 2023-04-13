@@ -1,4 +1,4 @@
-export const address = "0x14eE49eEeF7D0318e0006E535Ee7C6c9233262d7";
+export const address = "0xA127c4f4B2A6E618eC096bE59303038A4Cdb9eFa";
 export const abi = [
     {
         stateMutability: "payable",
@@ -6,11 +6,6 @@ export const abi = [
     },
     {
         inputs: [
-            {
-                internalType: "address",
-                name: "_user",
-                type: "address",
-            },
             {
                 internalType: "string",
                 name: "url",

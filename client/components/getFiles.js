@@ -10,7 +10,7 @@ function makeStorageClient() {
     return new Web3Storage({ token: GetAccessToken() });
 }
 
-export const getContent = async (cid) => {
+const getFun = async (cid) => {
     const client = makeStorageClient();
     const res = await client.get(cid);
     console.log(`Got a response! [${res.status}] ${res.statusText}`);
@@ -18,12 +18,20 @@ export const getContent = async (cid) => {
         throw new Error(`failed to get ${cid}`);
     }
     const files = await res.files();
-    const data = [];
-    for (const file of files) {
-        data.push({
+    const data = files.map((file) => {
+        return {
             name: file.name,
             link: `https://${cid}.ipfs.w3s.link/${file.name}`,
-        });
-    }
+        };
+    });
     return data;
+};
+
+export const getContent = (cids) => {
+    const res = [];
+    cids.forEach(async (cid) => {
+        let t = await getFun(cid);
+        res.push(...t);
+    });
+    return res;
 };

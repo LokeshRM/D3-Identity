@@ -8,7 +8,7 @@ import Navbar from "@/components/navbar";
 
 export default function Home() {
     const [selectedFile, setSelectedFile] = useState([]);
-    const [uploadedFles, setuploadedFles] = useState([]);
+    const [uploadedFiles, setuploadedFles] = useState([]);
 
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState();
@@ -45,6 +45,20 @@ export default function Home() {
         }
     };
 
+    const getUserCids = async () => {
+        try {
+            const provider = await getProviderOrSigner();
+            const contract = new Contract(address, abi, provider);
+            const signer = await provider.getSigner();
+            const data = await contract.getCids(await signer.getAddress());
+            const file = getContent(data);
+            console.log(file);
+            setuploadedFles(file);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         if (!walletConnected) {
             web3ModalRef.current = new Web3Modal({
@@ -52,6 +66,14 @@ export default function Home() {
                 providerOptions: {},
                 disableInjectedProvider: false,
             });
+        } else {
+            //getUserCids();
+        }
+    }, [walletConnected]);
+
+    useEffect(() => {
+        if (walletConnected) {
+            getUserCids();
         }
     }, [walletConnected]);
 
@@ -59,24 +81,19 @@ export default function Home() {
         e.preventDefault();
         if (selectedFile) {
             try {
-                const cid = await StoreContent(selectedFile);
-                const ipfsHash = `https://${cid}.ipfs.w3s.link/`;
-                console.log(ipfsHash);
+                const status = await StoreContent(
+                    selectedFile,
+                    getProviderOrSigner
+                );
+                console.log(status);
                 setSelectedFile([]);
+                await getUserCids();
             } catch (err) {
                 console.log(err);
             }
         } else {
             console.log("file not selected");
         }
-    };
-
-    const updateFiles = (data) => {
-        const uploaded = [...uploadedFles];
-        data.forEach((file) => {
-            uploaded.push(file);
-        });
-        setuploadedFles(uploaded);
     };
 
     return (
@@ -88,7 +105,7 @@ export default function Home() {
                     walletConnected={walletConnected}
                     currentAccount={walletAddress}
                     connectWallet={connectWallet}
-                    disconnect={setWalletConnected}
+                    disconnect={(x) => setWalletConnected(x)}
                 />
             </div>
 
@@ -160,11 +177,12 @@ export default function Home() {
 
             <div>
                 <button
-                    onClick={async () => {
-                        const data = await getContent(
-                            "bafybeifok2y6t2cawfpvwvp7i7xybprf6ffmjkj4aud3ysuqbgefxudcuq"
-                        );
-                        updateFiles(data);
+                    onClick={() => {
+                        // const data = await getContent(
+                        //     "bafybeidd2gyhagleh47qeg77xqndy2qy3yzn4vkxmk775bg2t5lpuy7pcu"
+                        // );
+                        // updateFiles(data);
+                        console.log(uploadedFiles);
                     }}
                     type="submit"
                     className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
@@ -174,10 +192,10 @@ export default function Home() {
                 </button>
             </div>
 
-            {/* display files */}
+            {/* display files that have been uploaded */}
 
-            <div>
-                {uploadedFles.map((file, i) => (
+            {uploadedFiles &&
+                uploadedFiles.map((file, i) => (
                     <a
                         key={i}
                         href={file.link}
@@ -187,7 +205,6 @@ export default function Home() {
                         {file.name}
                     </a>
                 ))}
-            </div>
         </>
     );
 }

@@ -14,8 +14,8 @@ contract Storage {
     mapping(address => string[]) trackShared;
     mapping(address => mapping(string => uint)) index;
 
-    function add(address _user, string memory url) external {
-        cids[_user].push(url);
+    function add(string memory url) external {
+        cids[msg.sender].push(url);
     }
 
     function remove(uint _index, address _user) private {
@@ -56,7 +56,6 @@ contract Storage {
     }
 
     function getCids(address _user) external view returns (string[] memory) {
-        require(_user == msg.sender, "Access is not granted!");
         return cids[_user];
     }
 
