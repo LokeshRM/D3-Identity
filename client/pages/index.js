@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import { providers, Contract } from "ethers";
-import { StoreContent } from "@/components/upload";
-import { getContent } from "@/components/getFiles";
+import { StoreContent } from "@/helperfunction/upload";
+import { getContent } from "@/helperfunction/getFiles";
 import { address, abi } from "@/contract";
 import Navbar from "@/components/navbar";
+import DropFileInput from "@/components/draganddrop";
+import Modal from "@/components/Modal";
 
 export default function Home() {
     const [selectedFile, setSelectedFile] = useState([]);
     const [uploadedFiles, setuploadedFles] = useState([]);
     const [state, setState] = useState(false);
+    const [shareModal, setShareModal] = useState(false);
+    const [cidSelected, setCidSelected] = useState();
 
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState();
@@ -65,6 +69,46 @@ export default function Home() {
         }
     };
 
+    const shareFile = async (user) => {
+        try {
+            const signer = await getProviderOrSigner(true);
+            const contract = new Contract(address, abi, signer);
+            const tx = await contract.grantAccess(user, cidSelected);
+            await tx.wait();
+            console.log("shared access");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deleteCid = async () => {
+        try {
+            const signer = await getProviderOrSigner(true);
+            const contract = new Contract(address, abi, signer);
+            const tx = await contract.removeCid(cidSelected);
+            await tx.wait();
+            console.log("removed Cid");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const getSharedAccess = async () => {
+        try {
+            const provider = await getProviderOrSigner();
+            const contract = new Contract(address, abi, provider);
+            const signer = await provider.getSigner();
+            const data = await contract.sharedAccess(
+                await signer.getAddress(),
+                cidSelected
+            );
+            console.log(data);
+            console.log("data been shared");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         if (!walletConnected) {
             web3ModalRef.current = new Web3Modal({
@@ -72,8 +116,6 @@ export default function Home() {
                 providerOptions: {},
                 disableInjectedProvider: false,
             });
-        } else {
-            //getUserCids();
         }
     }, [walletConnected]);
 
@@ -118,95 +160,105 @@ export default function Home() {
             </div>
 
             {/* input element */}
-
-            <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg
-                            aria-hidden="true"
-                            className="w-10 h-10 mb-3 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                        </svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">
-                                Click to upload
-                            </span>{" "}
-                            or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                            SVG, PNG, JPG or GIF (MAX. 800x400px)
-                        </p>
-                    </div>
-                    <input
-                        id="dropzone-file"
-                        type="file"
-                        className="hidden"
-                        onChange={(e) => {
-                            const chosenFiles = Array.prototype.slice.call(
-                                e.target.files
-                            );
-                            const uploaded = [...selectedFile];
-                            chosenFiles.some((file) => {
-                                uploaded.push(file);
-                            });
-                            setSelectedFile(uploaded);
-                        }}
-                        multiple
-                        required
-                    />
-                </label>
-            </div>
-
-            {/* display files */}
-
             <div>
-                {selectedFile.map((file, i) => (
-                    <div key={i}>{file.name}</div>
-                ))}
-            </div>
-            {/* upload elemnet */}
-            <div>
-                <button
-                    onClick={uploadit}
-                    type="submit"
-                    className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
-                >
-                    Upload
-                </button>
-            </div>
+                <DropFileInput
+                    onFileChange={(files) => setSelectedFile(files)}
+                    onFilespresent={selectedFile}
+                />
 
-            {/* refresh element */}
+                {/* display files */}
 
-            <div>
-                <button
-                    onClick={getUserCids}
-                    type="submit"
-                    className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
-                >
-                    refresh
-                </button>
-            </div>
-
-            {/* display files that have been uploaded */}
-
-            {state &&
-                uploadedFiles.map((file, i) => (
-                    <a
-                        key={i}
-                        href={file.link}
-                        target="_blank"
-                        className="block"
+                <div>
+                    {selectedFile.map((file, i) => (
+                        <div key={i}>{file.name}</div>
+                    ))}
+                </div>
+                {/* upload elemnet */}
+                <div>
+                    <button
+                        onClick={uploadit}
+                        type="submit"
+                        className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                        font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
                     >
-                        {file.cid}
-                    </a>
-                ))}
+                        Upload
+                    </button>
+                </div>
+
+                {/* refresh element */}
+
+                <div>
+                    <button
+                        onClick={getUserCids}
+                        type="submit"
+                        className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                        font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                    >
+                        refresh
+                    </button>
+                </div>
+
+                {/* display files that have been uploaded */}
+
+                <Modal
+                    status={shareModal}
+                    changeStatus={setShareModal}
+                    addUser={shareFile}
+                />
+
+                {state &&
+                    uploadedFiles.map((file, i) => (
+                        <div className="p-4">
+                            <div className="group relative">
+                                <button
+                                    type="button"
+                                    key={i}
+                                    onClick={() => {
+                                        setCidSelected(file.cid);
+                                        //setShareModal(true);
+                                    }}
+                                    className="bg-blue-200 text-black active:bg-blue-500 
+        font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                                >
+                                    {file.cid}
+                                </button>
+                                <nav className="border border-2 bg-white invisible border-gray-800 rounded w-60 absolute left-0 top-full transition-all opacity-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-1">
+                                    <ul className="py-1">
+                                        <li key="1">
+                                            <a
+                                                href="#"
+                                                className="block px-4 py-2 hover:bg-gray-100"
+                                                onClick={() => {
+                                                    setShareModal(true);
+                                                }}
+                                            >
+                                                share
+                                            </a>
+                                        </li>
+                                        <li key="2">
+                                            <a
+                                                href="#"
+                                                className="block px-4 py-2 hover:bg-gray-100"
+                                                onClick={deleteCid}
+                                            >
+                                                Delete
+                                            </a>
+                                        </li>
+                                        <li key="3">
+                                            <a
+                                                href="#"
+                                                className="block px-4 py-2 hover:bg-gray-100"
+                                                onClick={getSharedAccess}
+                                            >
+                                                getSharedDetails
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    ))}
+            </div>
         </>
     );
 }

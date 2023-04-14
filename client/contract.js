@@ -1,4 +1,4 @@
-export const address = "0xA127c4f4B2A6E618eC096bE59303038A4Cdb9eFa";
+export const address = "0x1ceeCc0C4e32b7FcD8803C958Bd881c1509Df8F6";
 export const abi = [
     {
         stateMutability: "payable",
@@ -8,7 +8,7 @@ export const abi = [
         inputs: [
             {
                 internalType: "string",
-                name: "url",
+                name: "_cid",
                 type: "string",
             },
         ],
@@ -45,7 +45,7 @@ export const abi = [
             },
             {
                 internalType: "string",
-                name: "_url",
+                name: "_cid",
                 type: "string",
             },
         ],
@@ -55,7 +55,13 @@ export const abi = [
         type: "function",
     },
     {
-        inputs: [],
+        inputs: [
+            {
+                internalType: "address",
+                name: "_user",
+                type: "address",
+            },
+        ],
         name: "grantedAccess",
         outputs: [
             {
@@ -76,7 +82,7 @@ export const abi = [
             },
             {
                 internalType: "string",
-                name: "_url",
+                name: "_cid",
                 type: "string",
             },
         ],
@@ -89,7 +95,25 @@ export const abi = [
         inputs: [
             {
                 internalType: "string",
-                name: "_url",
+                name: "_cid",
+                type: "string",
+            },
+        ],
+        name: "removeCid",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_user",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "_cid",
                 type: "string",
             },
         ],

@@ -17,6 +17,7 @@ export const StoreContent = async (files, getProviderOrSigner) => {
         console.log("Uploading files to IPFS with web3.storage....");
         const client = MakeStorageClient();
         const cid = await client.put(files);
+        console.log("cid", cid);
         const signer = await getProviderOrSigner(true);
         const contract = new Contract(address, abi, signer);
         const tx = await contract.add(cid);
