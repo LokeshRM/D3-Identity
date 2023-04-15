@@ -5,6 +5,8 @@ import { StoreContent } from "@/helperfunction/upload";
 import { getContent } from "@/helperfunction/getFiles";
 import { address, abi } from "@/contract";
 import Navbar from "@/components/navbar";
+import { HomeUploadFile, HomeUploadFolder } from "@/feat/upload";
+import { getFolder } from "@/feat/getfile";
 import DropFileInput from "@/components/draganddrop";
 import Modal from "@/components/Modal";
 
@@ -18,6 +20,8 @@ export default function Home() {
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState();
     const web3ModalRef = useRef();
+
+    const inputRef = useRef();
 
     const getProviderOrSigner = async (needSigner = false) => {
         const provider = await web3ModalRef.current.connect();
@@ -119,11 +123,11 @@ export default function Home() {
         }
     }, [walletConnected]);
 
-    useEffect(() => {
-        if (walletConnected) {
-            getUserCids();
-        }
-    }, [walletConnected]);
+    // useEffect(() => {
+    //     if (walletConnected) {
+    //         getUserCids();
+    //     }
+    // }, [walletConnected]);
 
     const uploadit = async (e) => {
         e.preventDefault();
@@ -159,22 +163,58 @@ export default function Home() {
                 />
             </div>
 
+            <input ref={inputRef} type="text" id="message" name="message" />
+
+            <button
+                className="p-5 bg-gray-500"
+                onClick={() => {
+                    HomeUploadFolder(
+                        inputRef.current.value,
+                        getProviderOrSigner
+                    );
+                }}
+            >
+                {" "}
+                new folder
+            </button>
+
+            <input
+                type="file"
+                onChange={(e) => {
+                    const newFile = e.target.files[0];
+                    if (newFile) {
+                        const updatedList = [newFile];
+                        setSelectedFile(updatedList);
+                    }
+                }}
+            />
+
+            <button
+                onClick={() =>
+                    HomeUploadFile(selectedFile, getProviderOrSigner)
+                }
+                className="my-5  flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                        font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+            >
+                Upload
+            </button>
+
             {/* input element */}
-            <div>
-                <DropFileInput
-                    onFileChange={(files) => setSelectedFile(files)}
-                    onFilespresent={selectedFile}
-                />
+            {/* <div> */}
+            {/* <DropFileInput
+                onFileChange={(files) => setSelectedFile(files)}
+                onFilespresent={selectedFile}
+            /> */}
 
-                {/* display files */}
+            {/* display files */}
 
-                <div>
+            {/* <div>
                     {selectedFile.map((file, i) => (
                         <div key={i}>{file.name}</div>
                     ))}
-                </div>
-                {/* upload elemnet */}
-                <div>
+                </div> */}
+            {/* upload elemnet */}
+            {/* <div>
                     <button
                         onClick={uploadit}
                         type="submit"
@@ -183,10 +223,10 @@ export default function Home() {
                     >
                         Upload
                     </button>
-                </div>
+                </div> */}
 
-                {/* refresh element */}
-
+            {/* refresh element */}
+            {/* 
                 <div>
                     <button
                         onClick={getUserCids}
@@ -196,17 +236,17 @@ export default function Home() {
                     >
                         refresh
                     </button>
-                </div>
+                </div> */}
 
-                {/* display files that have been uploaded */}
+            {/* display files that have been uploaded */}
 
-                <Modal
+            {/* <Modal
                     status={shareModal}
                     changeStatus={setShareModal}
                     addUser={shareFile}
-                />
+                /> */}
 
-                {state &&
+            {/* {state &&
                     uploadedFiles.map((file, i) => (
                         <div className="p-4">
                             <div className="group relative">
@@ -257,8 +297,8 @@ export default function Home() {
                                 </nav>
                             </div>
                         </div>
-                    ))}
-            </div>
+                    ))} */}
+            {/* </div> */}
         </>
     );
 }

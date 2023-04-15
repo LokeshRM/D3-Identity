@@ -1,4 +1,4 @@
-export const address = "0x1ceeCc0C4e32b7FcD8803C958Bd881c1509Df8F6";
+export const address = "0xEF0763ABC2F3C4aF5D9f75a33bec25DAbD708f1D";
 export const abi = [
     {
         stateMutability: "payable",
@@ -11,10 +11,91 @@ export const abi = [
                 name: "_cid",
                 type: "string",
             },
+            {
+                internalType: "string",
+                name: "_folder",
+                type: "string",
+            },
         ],
-        name: "add",
+        name: "addFile",
         outputs: [],
         stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "string",
+                name: "_cid",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "_folder",
+                type: "string",
+            },
+        ],
+        name: "addFolder",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "cidFile",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "cidFolder",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
     {
@@ -24,8 +105,13 @@ export const abi = [
                 name: "_user",
                 type: "address",
             },
+            {
+                internalType: "string",
+                name: "_folder",
+                type: "string",
+            },
         ],
-        name: "getCids",
+        name: "getFiles",
         outputs: [
             {
                 internalType: "string[]",
@@ -45,24 +131,11 @@ export const abi = [
             },
             {
                 internalType: "string",
-                name: "_cid",
+                name: "_folder",
                 type: "string",
             },
         ],
-        name: "grantAccess",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "address",
-                name: "_user",
-                type: "address",
-            },
-        ],
-        name: "grantedAccess",
+        name: "getFolders",
         outputs: [
             {
                 internalType: "string[]",
@@ -77,64 +150,55 @@ export const abi = [
         inputs: [
             {
                 internalType: "address",
-                name: "_user",
+                name: "",
                 type: "address",
             },
             {
                 internalType: "string",
-                name: "_cid",
+                name: "",
                 type: "string",
             },
-        ],
-        name: "refuseAccess",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
             {
                 internalType: "string",
-                name: "_cid",
+                name: "",
                 type: "string",
             },
         ],
-        name: "removeCid",
-        outputs: [],
-        stateMutability: "nonpayable",
+        name: "indexFile",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
     {
         inputs: [
             {
                 internalType: "address",
-                name: "_user",
+                name: "",
                 type: "address",
             },
             {
                 internalType: "string",
-                name: "_cid",
+                name: "",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "",
                 type: "string",
             },
         ],
-        name: "sharedAccess",
+        name: "indexFolder",
         outputs: [
             {
-                components: [
-                    {
-                        internalType: "address",
-                        name: "user",
-                        type: "address",
-                    },
-                    {
-                        internalType: "bool",
-                        name: "access",
-                        type: "bool",
-                    },
-                ],
-                internalType: "struct Storage.Permission[]",
+                internalType: "uint256",
                 name: "",
-                type: "tuple[]",
+                type: "uint256",
             },
         ],
         stateMutability: "view",
