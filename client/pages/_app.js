@@ -86,7 +86,7 @@ export default function App({ Component, pageProps }) {
         />
       </div>
       <div className="grid grid-cols-5 gap-3">
-        <div className="h-[100vh] bg-red-300  ">
+        <div className="h-[100vh] bg-[#F6F9FD]  ">
           <div onClick={setUploadModal}>New file</div>
           <div onClick={setFolderModal}>New Folder</div>
           <div className="cursor-pointer" onClick={() => setOpenFiles(0)}>
@@ -96,7 +96,7 @@ export default function App({ Component, pageProps }) {
             shared with me
           </div>
         </div>
-        <div className="h-[100vh] bg-blue-500 col-span-4  ">
+        <div className="h-[100vh]  col-span-4  ">
           <Component
             {...pageProps}
             openFiles={openFiles}

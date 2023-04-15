@@ -2,7 +2,7 @@ import { Web3Storage } from "web3.storage";
 import { providers, Contract } from "ethers";
 import { abi, address } from "@/contract";
 const web3storage_key =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDMxMjBjZWQxZTY5NjFBNDVhRmQwMTBGMzNkQ0MwOUMzNEE5ODhEZTAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODExODcxNzkyMDgsIm5hbWUiOiJwcm9qZWN0In0.VT1OBRLQVZY5sdEuqfC8Doba3ngYvIRGmsmGH014txw";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDMxMjBjZWQxZTY5NjFBNDVhRmQwMTBGMzNkQ0MwOUMzNEE5ODhEZTAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODE1NTM5NDAzNzQsIm5hbWUiOiJnZXRmaWxlIn0.B2zq3OPm1_YWEdxPdeuDpv1AsLZ5DiB6klTBO5TKLZQ";
 
 function GetAccessToken() {
     return web3storage_key;

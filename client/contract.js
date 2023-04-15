@@ -1,4 +1,4 @@
-export const address = "0xEF0763ABC2F3C4aF5D9f75a33bec25DAbD708f1D";
+export const address = "0x0eB2Ec3e331b93E0481B2e2Ce4074533A0785731";
 export const abi = [
     {
         stateMutability: "payable",
