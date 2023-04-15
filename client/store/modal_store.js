@@ -21,4 +21,28 @@ const useModalStore = create((set) => ({
     }))
 }));
 
+const useModalUploadFileStore = create((set)=>({
+    openModal:false,
+    setUploadModal:()=>set((state)=>({
+        openModal:true
+    })),
+    closeUploadModal:()=>set((state)=>({
+        openModal:false
+    }))
+}))
+
+const useCreateFolderStore = create((set) => ({
+  openFolderModal: false,
+  setFolderModal: () =>
+    set((state) => ({
+      openFolderModal: true,
+    })),
+  closeFolderModal: () =>
+    set((state) => ({
+      openFolderModal: false,
+    })),
+}));
+
 export default useModalStore
+
+export { useModalUploadFileStore, useCreateFolderStore };
