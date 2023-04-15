@@ -41,10 +41,11 @@ const DropFileInput = ({ getProviderOrSigner }) => {
         setFileList([]);
         closeUploadModal();
       })
-      
-      
     } else {
-      // UploadFile()
+      UploadFile(fileList,cid,getProviderOrSigner).then(res=>{console.log(res);
+        setFileList([]);
+        closeUploadModal();
+      })
     }
   };
 

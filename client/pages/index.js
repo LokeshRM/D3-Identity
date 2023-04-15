@@ -93,9 +93,9 @@ export default function Home(props) {
             });
             console.log(newArray);
             setfetchfolders(newArray)
-            // setTimeout(()=>{
-            //     setStateFolder(true)
-            // },1500)
+            setTimeout(()=>{
+                setStateFolder(true)
+            },1500)
         });
     };
 
@@ -115,7 +115,7 @@ export default function Home(props) {
     </div>
     <div>
         {
-            state && <ShowFolder fetchedFolders={fetchedFolders} />
+            stateFolder && <ShowFolder fetchedFolders={fetchedFolders} />
         }
     </div>
     </div> : <div>

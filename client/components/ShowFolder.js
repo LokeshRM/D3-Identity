@@ -3,7 +3,13 @@ import folder from "../public/folder.svg"
 import Image from 'next/image';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { useRouter } from "next/router";
 const ShowFolder = ({ fetchedFolders }) => {
+    const router = useRouter()
+    const visitFolder = (cid)=>{
+        console.log(cid);
+        router.push(cid)
+    }
     return (
         <div>
             <div className="grid_folder">
@@ -13,7 +19,7 @@ const ShowFolder = ({ fetchedFolders }) => {
                         return (
                             <div
                                 className=" card-component cursor-pointer hover:bg-gray-300"
-                                
+                                onClick={()=>visitFolder(item.cid)}
                             >
                                 <div className="lower-container flex justify-between">
                                     <div className="flex justify-start">

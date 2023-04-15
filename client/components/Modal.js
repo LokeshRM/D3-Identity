@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import CancelIcon from "@mui/icons-material/Cancel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { HomeUploadFolder } from '@/feat/upload';
+import { HomeUploadFolder,UploadFolder } from '@/feat/upload';
 import { useRouter } from "next/router";
 
 
@@ -168,7 +168,10 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
         closeFolderModal()
       })
     } else {
-      // for folder inside another folder
+      UploadFolder(input,cid, getProviderOrSigner).then((res)=>{
+        setInput("")
+        closeFolderModal()
+      })
     }
   };
   return (

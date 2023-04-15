@@ -65,7 +65,7 @@ export const UploadFile = async (file, folder, getProviderOrSigner) => {
         const contract = new Contract(address, abi, signer);
         const tx = await contract.addFile(cid, folder);
         await tx.wait();
-        console.log("done uploaded file!");
+        console.log("done uploaded folder file!");
         return true;
     } catch (err) {
         console.log(err);
