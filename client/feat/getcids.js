@@ -8,7 +8,7 @@ export const getFileCids = async (getProviderOrSigner, folder) => {
         const contract = new Contract(address, abi, provider);
         const signer = await provider.getSigner();
         const data = await contract.getFiles(await signer.getAddress(), folder);
-        console.log(data);
+        return data
     } catch (err) {
         console.log(err);
     }

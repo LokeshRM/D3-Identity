@@ -25,3 +25,67 @@ body {
     )
     rgb(var(--background-start-rgb));
 } */
+
+
+.grid_folder{
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+
+}
+
+.grid_folder_contain{
+  grid-column: 2/3;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.card-component {
+  width: 300px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 5px 0 5px 0 ;
+  background:  #F2F7FD ;
+  border-radius: 1rem;
+}
+
+.upper-container {
+ 
+padding-top:5px ;
+padding-bottom:5px ;
+  
+}
+
+.image-container {
+  width: 80%;
+  height: 10rem;  
+  padding: 5px;
+  margin: 0 auto;
+  
+}
+
+.communities-logo {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.6rem;
+}
+
+.lower-container{
+  text-align: center;
+  margin:1rem;
+}
+
+
+.show-image{
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  
+}
+
+.no-scroll::-webkit-scrollbar{
+  display: none;
+}
+.no-scroll::before, .no-scroll::after{
+  border: none;
+}
+

@@ -1,65 +1,217 @@
-import { useRef } from "react";
+import React, { useState } from 'react'
+import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import CancelIcon from "@mui/icons-material/Cancel";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { HomeUploadFolder } from '@/feat/upload';
+import { useRouter } from "next/router";
 
-const Modal = ({ status, changeStatus, addUser }) => {
-    const inputRef = useRef();
 
-    return (
-        <>
-            {status ? (
-                <>
-                    <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-non transition delay-1000">
-                        <div className="relative my-6 mx-auto w-[600px]">
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                                    <h3 className="text-xl font=semibold">
-                                        Share these File
-                                    </h3>
-                                    <button
-                                        className="bg-transparent border-0 text-black float-right"
-                                        onClick={() => changeStatus(false)}
-                                    >
-                                        <span className="text-black opacity-7 h-8 w-8 text-xl block bg-gray-400 py-0 rounded-full">
-                                            x
-                                        </span>
-                                    </button>
-                                </div>
-                                <div className="relative p-6 flex-auto">
-                                    <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
-                                        <label className="block text-black text-sm font-bold mb-1">
-                                            Enter address to share
-                                        </label>
-                                        <input
-                                            ref={inputRef}
-                                            className="shadow appearance-none border rounded w-full py-2 px-1 text-black"
-                                        />
-                                    </form>
-                                </div>
-                                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                    <button
-                                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                                        type="button"
-                                        onClick={() => changeStatus(false)}
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        className="text-white bg-blue-500 active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                                        type="button"
-                                        onClick={() => {
-                                            changeStatus(false);
-                                            addUser(inputRef.current.value);
-                                        }}
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            ) : null}
-        </>
-    );
+import {
+  useModalUploadFileStore,
+  useCreateFolderStore,
+} from "../store/modal_store";
+import useModalStore from '@/store/modal_store';
+import DropFileInput from './draganddrop';
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxHeight: "700px",
+  overflowY: "scroll",
+  border: "none",
+//   backgroundColor:"blue"
+};
+const style1 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  
+  border: "none",
+  //   backgroundColor:"blue"
 };
 
-export default Modal;
+const style2 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 900,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  borderRadius:5,
+  p: 4,
+};
+
+const style3 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  // boxShadow: 24,
+  borderRadius: 2,
+  p: 4,
+};
+
+const ModalPopUp = () => {
+    const { openModalvariable, setCloseModal, link , type} = useModalStore(
+      (state) => ({
+        openModalvariable: state.openModalvariable,
+        setOpenModal: state.setOpenModal,
+        setCloseModal: state.setCloseModal,
+        link: state.link,
+        type: state.type,
+      })
+    );
+     
+    const handleClose = () => setCloseModal();
+
+  return (
+    <div>
+      <Modal
+        open={openModalvariable}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{ border: "none" }}
+      >
+        <div>
+          {type == "image" ? (
+            <div>
+              <Box sx={style} className="no-scroll">
+                <img src={link} className="show-image" />
+              </Box>
+            </div>
+          ) : (
+            <div></div>
+          )}
+
+          {type === "pdf" ? (
+            <Box sx={style1} className="no-scroll">
+              <embed
+                src={link}
+                type="application/pdf"
+                className="show-image"
+                width="900px"
+                height="900px"
+                WMODE="transparent"
+              />
+            </Box>
+          ) : (
+            <div></div>
+          )}
+          {type === "vedio" ? (
+            <Box sx={style} className="no-scroll">
+              <vedio controls>
+                <source src={link} type="video/mp4"></source>
+              </vedio>
+            </Box>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+const ModalPopUpUploadFile = (
+  {getProviderOrSigner}
+) => {
+  const { openModal, closeUploadModal } = useModalUploadFileStore((state) => ({
+    openModal: state.openModal,
+    closeUploadModal: state.closeUploadModal,
+  }));
+
+  const handleClose = () => closeUploadModal();
+
+  return (
+    <div>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style2} className="no-scroll">
+          <DropFileInput getProviderOrSigner={getProviderOrSigner} />
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
+
+const CreateFolderModal = ({ getProviderOrSigner }) => {
+  const [input, setInput] = useState("");
+  const router = useRouter();
+  const { openFolderModal, closeFolderModal } = useCreateFolderStore(
+    (state) => ({
+      openFolderModal: state.openFolderModal,
+      closeFolderModal: state.closeFolderModal,
+    })
+  );
+
+  const handleClose = () => closeFolderModal();
+  const createFolder = () => {
+    const { cid } = router.query;
+    if (cid === undefined) {
+      HomeUploadFolder(input, getProviderOrSigner).then((res)=>{
+        setInput("")
+        closeFolderModal()
+      })
+    } else {
+      // for folder inside another folder
+    }
+  };
+  return (
+    <div>
+      <Modal
+        open={openFolderModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style3} className="no-scroll ">
+          <div>
+            <p>Create a Folder</p>
+          </div>
+          <div className="flex">
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              name="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              fullWidth
+              sx={{ marginRight: "10px" }}
+            />
+            {input.length > 0 ? (
+              <>
+                <Button variant="contained" onClick={createFolder}>
+                  Create
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
+
+export default ModalPopUp;
+
+export { ModalPopUpUploadFile, CreateFolderModal };
+
