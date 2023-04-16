@@ -21,6 +21,7 @@ export const getFile = async (cid) => {
     const data = files.map((file) => {
         return {
             name: file.name,
+            cid : cid,
             link: `https://${cid}.ipfs.w3s.link/${file.name}`,
         };
     });

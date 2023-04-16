@@ -43,6 +43,64 @@ const useCreateFolderStore = create((set) => ({
     })),
 }));
 
+const useDeleteDataStore = create((set) => ({
+  openDeleteModalValue: false,
+  cid: "",
+  setCid: (cid) =>
+    set((state) => ({
+      cid: (state.cid = cid),
+    })),
+  setOpenDeleteModal: () =>
+    set((state) => ({
+      openDeleteModalValue: true,
+    })),
+  setCloseDeleteModal: () =>
+    set((state) => ({
+      openDeleteModalValue: false,
+    })),
+  
+}));
+
+const useSharefile = create((set) => ({
+  openShareFileValue: false,
+  cid: "",
+  setCidShareFile: (cid) =>
+    set((state) => ({
+      cid: (state.cid = cid),
+    })),
+  setOpenShareFileModal: () =>
+    set((state) => ({
+      openShareFileValue: true,
+    })),
+  setCloseShareFileModal: () =>
+    set((state) => ({
+      openShareFileValue: false,
+    })),
+}));
+
+const useSharedWithStore = create((set) => ({
+  openSharedWithStore: false,
+  cid: "",
+  setCidSharedWith: (cid) =>
+    set((state) => ({
+      cid: (state.cid = cid),
+    })),
+  setOpenSharedWithModal: () =>
+    set((state) => ({
+      openSharedWithStore: true,
+    })),
+  setCloseSharedWithModal: () =>
+    set((state) => ({
+      openSharedWithStore: false,
+    })),
+}));
+
 export default useModalStore
 
-export { useModalUploadFileStore, useCreateFolderStore };
+export {
+  useModalUploadFileStore,
+  useCreateFolderStore,
+  useDeleteDataStore,
+  useSharefile,
+  useSharedWithStore,
+};

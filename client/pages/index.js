@@ -12,8 +12,18 @@ export default function Home(props) {
     const [state, setState] = useState(false);
     const [stateFolder, setStateFolder] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
-    const [walletAddress, setWalletAddress] = useState();
+    const [walletAddress, setWalletAddress] = useState("");
     const web3ModalRef = useRef();
+
+    //  to reset the values
+    const resetValues = ()=>{
+        setfetchfiles([])
+        setfetchfolders([])
+        setState(false)
+        setStateFolder(false)
+        setWalletConnected(false)
+        
+    }
 
     const getProviderOrSigner = async (needSigner = false) => {
         const provider = await web3ModalRef.current.connect();
@@ -115,7 +125,7 @@ export default function Home(props) {
     </div>
     <div>
         {
-            stateFolder && <ShowFolder fetchedFolders={fetchedFolders} />
+            stateFolder && <ShowFolder fetchedFolders={fetchedFolders} resetValues = {resetValues}  />
         }
     </div>
     </div> : <div>
