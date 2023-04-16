@@ -34,7 +34,7 @@ const ImageType = ({ item }) => {
   };
 
   return (
-    <div className="card-component  hover:bg-gray-300 ">
+    <div className="card-component  hover:bg-[#def9fb]   ">
       <div className="lower-container flex justify-between">
         <div className="flex justify-start">
           <PhotoIcon sx={{ marginRight: "5px" }} />
@@ -56,7 +56,7 @@ const ImageType = ({ item }) => {
           <MoreVertIcon onClick={changeDivider} />
         </div>
       </div>
-      <div className="upper-container" onClick={seeFullImage} >
+      <div className="upper-container" onClick={seeFullImage}>
         <div className="image-container cursor-pointer ">
           <img src={item.link} className="communities-logo" />
         </div>

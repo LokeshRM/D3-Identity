@@ -11,6 +11,7 @@ import { useSharefile } from '../store/modal_store';
 import SendIcon from "@mui/icons-material/Send";
 import { useSharedWithStore } from '../store/modal_store';
 import UserListIterator from './UserListIterator';
+import { useLoaderModal } from '../store/modal_store';
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
@@ -178,6 +179,11 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
     })
   );
 
+  const { setConst3, setConst4 } = useLoaderModal((state) => ({
+    setConst3: state.setConst3,
+    setConst4:state.setConst4
+  }));
+
   const handleClose = () => closeFolderModal();
   const createFolder = () => {
     const { cid } = router.query;
@@ -185,11 +191,13 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
       HomeUploadFolder(input, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setConst3()
       })
     } else {
       UploadFolder(input,cid, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setConst4()
       })
     }
   };

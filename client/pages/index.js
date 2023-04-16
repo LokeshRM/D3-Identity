@@ -5,7 +5,7 @@ import { getFileCids, getFolderCids } from "@/feat/getcids";
 import ShowFiles from "@/components/ShowFiles";
 import ShowFolder from "@/components/ShowFolder";
 import { getFile,getFolder } from "@/feat/getfile";
-
+import { useLoaderModal } from "@/store/modal_store";
 export default function Home(props) {
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
@@ -13,6 +13,14 @@ export default function Home(props) {
     const [stateFolder, setStateFolder] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState("");
+    
+    const { count1, count2, count3, count4 } = useLoaderModal((state) => ({
+      count1: state.count1,
+      count2: state.count2,
+      count3: state.count3,
+      count4: state.count4,
+    }));
+
     const web3ModalRef = useRef();
 
     //  to reset the values
@@ -57,15 +65,15 @@ export default function Home(props) {
     };
 
     useEffect(() => {
-        if (!walletConnected) {
-            web3ModalRef.current = new Web3Modal({
-                network: "sepolia",
-                providerOptions: {},
-                disableInjectedProvider: false,
-            });
-        }
-        connectWallet();
-    }, [walletConnected]);
+      if (!walletConnected) {
+        web3ModalRef.current = new Web3Modal({
+          network: "sepolia",
+          providerOptions: {},
+          disableInjectedProvider: false,
+        });
+      }
+      connectWallet();
+    }, [walletConnected, count2, count1, count3, count4]);
 
     const getFiles = async () => {
         const signer = await getProviderOrSigner(true);
@@ -120,19 +128,28 @@ export default function Home(props) {
         }
     }, [walletConnected,props.render]);
 
-    return <>{props.openFiles == 0 ? <div> 
-    <div>
-
-    {
-        <ShowFiles fetchedFiles={fetchedFiles} />
-    }
-    </div>
-    <div>
+    return (
+        <div>
         {
-            <ShowFolder fetchedFolders={fetchedFolders} resetValues = {resetValues}  />
+
         }
-    </div>
-    </div> : <div>
-       {}
-    </div>}</>;
+        {props.openFiles == 0 ? <div> 
+        <div>
+            {
+                state && <ShowFiles fetchedFiles={fetchedFiles} />
+            }
+        </div>
+        <div>
+            {
+                stateFolder && <ShowFolder fetchedFolders={fetchedFolders} resetValues = {resetValues}  />
+            }
+        </div>
+        </div> : <div>
+        {
+
+        }
+        </div>
+        }
+        </div>
+    );
 }

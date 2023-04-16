@@ -6,11 +6,16 @@ import { getFileCids, getFolderCids } from "@/feat/getcids";
 import ShowFiles from "@/components/ShowFiles";
 import ShowFolder from "@/components/ShowFolder";
 import { getFile, getFolder } from "@/feat/getfile";
-
+import { useLoaderModal } from "@/store/modal_store";
 const FolderStructure = (props) => {
     const [presentCid, setCid] = useState();
     const router = useRouter();
-   
+    const { count1,count2, count3, count4 } = useLoaderModal((state)=>({
+      count1:state.count1,
+      count2:state.count2,
+      count3:state.count3,
+      count4:state.count4,
+    }))
 
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
@@ -61,8 +66,8 @@ const FolderStructure = (props) => {
     };
 
     useEffect(() => {
-        console.log('hello world inside cid file');
-        
+      console.log("hello world inside cid file");
+
       if (!walletConnected) {
         web3ModalRef.current = new Web3Modal({
           network: "sepolia",
@@ -71,7 +76,7 @@ const FolderStructure = (props) => {
         });
       }
       connectWallet();
-    }, [walletConnected, fetchedFiles, router.query.slug]);
+    }, [walletConnected, fetchedFiles, router.query.slug, count2, count1, count3, count4]);
 
     useEffect(() => {
       if (router.isReady) {
@@ -84,7 +89,7 @@ const FolderStructure = (props) => {
         }
       }
       connectWallet();
-    }, [walletConnected, router.query.slug]);
+    }, [walletConnected, router.query.slug, count2, count1, count3, count4]);
 
     const getFiles = async (cid) => {
         getFileCids(getProviderOrSigner, cid).then(
