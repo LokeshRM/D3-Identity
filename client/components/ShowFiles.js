@@ -5,13 +5,14 @@ import { useEffect } from "react";
 import ImageType from "./fileType/ImageType";
 import PdfType from "./fileType/PdfType";
 import VedioType from "./fileType/VedioType";
+import { SharedWithModal } from "./Modal";
 
 const ShowFiles = ({ fetchedFiles,getProviderOrSigner }) => {
     const [decodedFile, setDecodeFile] = useState([]);
+    const type = "files";
     const getFileType = (filename) => {
         let ind = filename.lastIndexOf(".");
         let type = filename.slice(ind + 1);
-        console.log(type);
         return type;
     };
     useEffect(() => {
@@ -20,6 +21,7 @@ const ShowFiles = ({ fetchedFiles,getProviderOrSigner }) => {
     return (
         <div className="grid_folder">
         <div className="grid_folder_contain ">
+        
             {fetchedFiles.map((item) => {
                 if (
                     getFileType(item.name) === "jpg" ||

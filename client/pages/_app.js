@@ -89,6 +89,7 @@ export default function App({ Component, pageProps }) {
       <CreateFolderModal getProviderOrSigner={getProviderOrSigner} />
       <OpenDeleteModal getProviderOrSigner={getProviderOrSigner} />
       <ShareDataModal getProviderOrSigner={getProviderOrSigner} />
+      <SharedWithModal getProviderOrSigner={getProviderOrSigner}/>
 
       <div className="">
         <Navbar

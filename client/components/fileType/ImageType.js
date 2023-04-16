@@ -5,6 +5,7 @@ import useModalStore from "@/store/modal_store";
 import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Share_Remove from "../Share_Remove";
+import { SharedWithModal } from "../Modal";
 
 const ImageType = ({ item,getProviderOrSigner }) => {
   const type = "file"
@@ -36,6 +37,7 @@ const ImageType = ({ item,getProviderOrSigner }) => {
   return (
     <div className="card-component  hover:bg-[#def9fb]   ">
       <div className="lower-container flex justify-between">
+      {/* <SharedWithModal getProviderOrSigner={getProviderOrSigner} cid={item.cid} type={type} /> */}
         <div className="flex justify-start">
           <PhotoIcon sx={{ marginRight: "5px" }} />
           <p className="text-sm m-[1px] ">{item.name.slice(0, 30)}</p>

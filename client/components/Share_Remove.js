@@ -30,8 +30,9 @@ const Share_Remove = ({getProviderOrSigner, changeDivider , cid,type}) => {
     setOpenShareFileModal: state.setOpenShareFileModal,
   }));
 
-  const {setCidSharedWith, setOpenSharedWithModal } = useSharedWithStore((state) => ({
+  const {setTypeSharedFile, setCidSharedWith, setOpenSharedWithModal } = useSharedWithStore((state) => ({
     setCidSharedWith:state.setCidSharedWith,
+    setTypeSharedFile:state.setTypeSharedFile,
     setOpenSharedWithModal: state.setOpenSharedWithModal,
   }));
 
@@ -50,6 +51,7 @@ const Share_Remove = ({getProviderOrSigner, changeDivider , cid,type}) => {
 
   const sharedWith = ()=>{
     setCidSharedWith(cid)
+    setTypeSharedFile(type)
     setOpenSharedWithModal()
     changeDivider()
   }
