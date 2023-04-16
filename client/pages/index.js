@@ -150,7 +150,7 @@ export default function Home(props) {
             <button className="p-4 bg-blue-500 hover:bg-blue-300" onClick={()=>{
                 getFilesSharedMe(getProviderOrSigner);
                 getFoldersSharedMe(getProviderOrSigner);
-            }}>GET files</button>
+            }}>GET files in</button>
         }
         </div>
         }
