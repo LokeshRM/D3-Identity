@@ -83,7 +83,7 @@ export default function Home(props) {
             setfetchfiles(newArray)
             setTimeout(()=>{
                 setState(true)
-            },1500)
+            },1800)
         });
     };
 
@@ -105,7 +105,7 @@ export default function Home(props) {
             setfetchfolders(newArray)
             setTimeout(()=>{
                 setStateFolder(true)
-            },1500)
+            },1800)
         });
     };
 
