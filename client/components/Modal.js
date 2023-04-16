@@ -12,6 +12,9 @@ import SendIcon from "@mui/icons-material/Send";
 import { useSharedWithStore } from '../store/modal_store';
 import UserListIterator from './UserListIterator';
 import { useLoaderModal } from '../store/modal_store';
+import AddIcon from "@mui/icons-material/Add";
+// import TextField from "@mui/material/TextField";
+import { UpdateLoaderbuttonShow } from './Loader';
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
@@ -79,6 +82,20 @@ const style4 = {
   // boxShadow: 24,
   borderRadius: 2,
   p: 4,
+};
+
+const style5 = {
+  position: "relative",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width:400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  
+
 };
 
 const ModalPopUp = () => {
@@ -173,6 +190,7 @@ const ModalPopUpUploadFile = (
 const CreateFolderModal = ({ getProviderOrSigner }) => {
   const [input, setInput] = useState("");
   const router = useRouter();
+  const [load, setLoad] = useState(false)
   const { openFolderModal, closeFolderModal } = useCreateFolderStore(
     (state) => ({
       openFolderModal: state.openFolderModal,
@@ -187,17 +205,20 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
 
   const handleClose = () => closeFolderModal();
   const createFolder = () => {
+    setLoad(true)
     const { cid } = router.query;
     if (cid === undefined) {
       HomeUploadFolder(input, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setLoad(false)
         setConst3()
       })
     } else {
       UploadFolder(input,cid, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setLoad(false)
         setConst4()
       })
     }
@@ -211,13 +232,13 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style3} className="no-scroll ">
-          <div className="m-3">
-            <p>Create a Folder</p>
+          <div className="m-3 text-center">
+            <Typography variant="h5">Create Folder</Typography>
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <TextField
               id="outlined-basic"
-              label="Outlined"
+              label="Folder Name  "
               variant="outlined"
               name="input"
               value={input}
@@ -227,9 +248,17 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
             />
             {input.length > 0 ? (
               <div>
-                <Button variant="contained" onClick={createFolder}>
-                  Create
-                </Button>
+                {load ? (
+                  <div>
+                    <UpdateLoaderbuttonShow />
+                  </div>
+                ) : (
+                  <div>
+                    <Button variant="contained" onClick={createFolder}>
+                      <AddIcon />
+                    </Button>
+                  </div>
+                )}
               </div>
             ) : (
               <div></div>
@@ -316,6 +345,7 @@ const  OpenDeleteModal=({getProviderOrSigner}) => {
 const ShareDataModal = ({getProviderOrSigner})=>{
     const router = useRouter();
   const [input, setInput] = useState("");
+  const [load, setLoad] = useState(false)
   const {type, _cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
     (state) => ({
       _cid:state._cid,
@@ -325,17 +355,20 @@ const ShareDataModal = ({getProviderOrSigner})=>{
     })
   );
   const shareData = ()=>{
+    setLoad(true)
     const { cid } = router.query;
     if(type == "folder"){
         giveAccessFolder(getProviderOrSigner,input,_cid).then(res =>{ 
               console.log(res);
               setCloseShareFileModal();
+              setLoad(false)
           })
           
     }else{
           giveAccessFile(getProviderOrSigner,input,_cid).then(res =>{ 
                 console.log(res);
                 setCloseShareFileModal();
+                setLoad(false)
             })
     }
  
@@ -353,7 +386,7 @@ const ShareDataModal = ({getProviderOrSigner})=>{
           <div className="m-3">
             <p>Share File</p>
           </div>
-          <div className="flex">
+          <div className="flex items-center">
             <TextField
               id="outlined-basic"
               label="Outlined"
@@ -366,9 +399,11 @@ const ShareDataModal = ({getProviderOrSigner})=>{
             />
             {input.length > 0 ? (
               <div>
-                <Button variant="contained" onClick={()=>shareData()}>
-                  <SendIcon />  
-                </Button>
+                <div>
+                  <Button variant="contained" onClick={() => shareData()}>
+                    <SendIcon />
+                  </Button>
+                </div>
               </div>
             ) : (
               <div></div>
@@ -431,6 +466,105 @@ const SharedWithModal = ({cid,type,getProviderOrSigner})=>{
   );
 }
 
+
+const ProfileModal = ({ openModal, openModalFunction, updateValue }) => {
+  const [open, setOpen] = React.useState(openModal);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const saveData = ()=>{
+
+  }
+
+  return (
+    <div>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style5}>
+          <div>
+            <CancelIcon
+              onClick={openModalFunction}
+              sx={{
+                cursor: "pointer",
+                marginBottom: "1rem",
+                position: "absolute",
+                right: "1rem",
+              }}
+            />
+            <div>
+              <Typography variant="h3"> Edit Profile </Typography>
+            </div>
+
+            <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              <TextField
+                id="standard-basic"
+                label="Name"
+                variant="standard"
+                fullWidth
+                onChange={(e) => updateValue(e.target.value, "name")}
+              />
+            </div>
+            <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              <TextField
+                id="standard-basic"
+                label="Email"
+                variant="standard"
+                fullWidth
+                onChange={(e) => updateValue(e.target.value, "phone")}
+              />
+            </div>
+            <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              <TextField
+                id="standard-basic"
+                label="Phone"
+                variant="standard"
+                fullWidth
+                onChange={(e) => updateValue(e.target.value, "email")}
+              />
+            </div>
+            <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              <TextField
+                id="standard-basic"
+                label="Address"
+                variant="standard"
+                fullWidth
+                onChange={(e) => updateValue(e.target.value, "address")}
+              />
+            </div>
+            <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              <TextField
+                id="standard-basic"
+                label="Adhaar"
+                variant="standard"
+                fullWidth
+                onChange={(e) => updateValue(e.target.value, "adhaar")}
+              />
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                sx={{
+                  cursor: "pointer",
+                  marginBottom: "1rem",
+                  marginTop:"1rem", 
+                  right: "1rem",
+                }}
+                onClick={saveData}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+};
+
 export default ModalPopUp;
 
 export {
@@ -439,5 +573,6 @@ export {
   OpenDeleteModal,
   ShareDataModal,
   SharedWithModal,
+  ProfileModal,
 };
 

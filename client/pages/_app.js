@@ -153,7 +153,7 @@ export default function App({ Component, pageProps }) {
               </div>
               <div className="h-[0.8px] bg-blue-200 mt-1 mr-4 "></div>
             </div>
-            <div className="h-[100vh]  col-span-4  ">
+            <div className="h-[100vh] max-h-[86vh] overflow-y-scroll col-span-4  ">
               <Component
                 key={router.asPath}
                 {...pageProps}

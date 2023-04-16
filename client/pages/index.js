@@ -6,6 +6,8 @@ import ShowFiles from "@/components/ShowFiles";
 import ShowFolder from "@/components/ShowFolder";
 import { getFile,getFolder } from "@/feat/getfile";
 import { useLoaderModal } from "@/store/modal_store";
+import useFileStoreModal from "@/store/filesStore";
+import Loader from "@/components/Loader";
 export default function Home(props) {
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
@@ -13,13 +15,20 @@ export default function Home(props) {
     const [stateFolder, setStateFolder] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState("");
-    
+    const [load, setLoad] = useState(false)
     const { count1, count2, count3, count4 } = useLoaderModal((state) => ({
       count1: state.count1,
       count2: state.count2,
       count3: state.count3,
       count4: state.count4,
     }));
+
+    const { setFiles, setFolder, files, folder } = useFileStoreModal((state)=>({
+        setFiles:state.setFiles,
+        setFolder:state.setFolder,
+        files:state.files,
+        folder:state.folder
+    }))
 
     const web3ModalRef = useRef();
 
@@ -65,6 +74,7 @@ export default function Home(props) {
     };
 
     useEffect(() => {
+        setLoad(true)
       if (!walletConnected) {
         web3ModalRef.current = new Web3Modal({
           network: "sepolia",
@@ -89,8 +99,14 @@ export default function Home(props) {
                     });
                 });
             }
-            console.log(newArray);
+            console.log("printing new Array",newArray);
             setfetchfiles(newArray)
+
+            // just checking values are changing or not in real time global storage
+            setFiles(newArray)
+            // logging out
+            console.log("printing global storage", files)
+
             setTimeout(()=>{
                 setState(true)
             },1800)
@@ -113,10 +129,11 @@ export default function Home(props) {
                     });
                 });
             }
-            console.log(newArray);
+            // console.log(newArray);
             setfetchfolders(newArray)
             setTimeout(()=>{
                 setStateFolder(true)
+                setLoad(false);
             },1800)
         });
     };
@@ -125,31 +142,43 @@ export default function Home(props) {
         if (walletConnected) {
                 getFiles();
                 getFolders() 
+                
         }
     }, [walletConnected,props.render]);
 
     return (
-        <div>
-        {
-
-        }
-        {props.openFiles == 0 ? <div> 
-        <div>
-            {
-                state && <ShowFiles fetchedFiles={fetchedFiles} getProviderOrSigner={getProviderOrSigner} />
-            }
-        </div>
-        <div>
-            {
-                stateFolder && <ShowFolder getProviderOrSigner={getProviderOrSigner} fetchedFolders={fetchedFolders} resetValues = {resetValues}  />
-            }
-        </div>
-        </div> : <div>
-        {
-
-        }
-        </div>
-        }
-        </div>
+      <div>
+        {load? (
+          <div>
+            <Loader />
+          </div>
+        ) : (
+          <div>
+            {props.openFiles == 0 ? (
+              <div>
+                <div>
+                  {state && (
+                    <ShowFiles
+                      fetchedFiles={fetchedFiles}
+                      getProviderOrSigner={getProviderOrSigner}
+                    />
+                  )}
+                </div>
+                <div>
+                  {stateFolder && (
+                    <ShowFolder
+                      getProviderOrSigner={getProviderOrSigner}
+                      fetchedFolders={fetchedFolders}
+                      resetValues={resetValues}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div>{}</div>
+            )}
+          </div>
+        )}
+      </div>
     );
 }
