@@ -20,6 +20,7 @@ import {
 import useModalStore from '@/store/modal_store';
 import DropFileInput from './draganddrop';
 import { Typography } from '@mui/material';
+import { deleteFile, deleteFolder, deleteHomeFile, deleteHomeFolder } from '@/feat/helper';
 const style = {
   position: "absolute",
   top: "50%",
@@ -240,18 +241,46 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
 };
 
 
-const  OpenDeleteModal=() => {
-
-  const { cid,openDeleteModalValue, setCloseDeleteModal } = useDeleteDataStore(
+const  OpenDeleteModal=({getProviderOrSigner}) => {
+    const router = useRouter();
+  const { cid,type,openDeleteModalValue, setCloseDeleteModal } = useDeleteDataStore(
     (state) => ({
       cid:state.cid,
+      type:state.type,
       openDeleteModalValue: state.openDeleteModalValue,
       setCloseDeleteModal: state.setCloseDeleteModal,
     })
   );
 
-  const DeleteData = ()=>{
-    //  delete file and folder based on cid
+  const DeleteData = (file)=>{
+    const { cid } = router.query;
+    if(type == "folder"){
+        if (cid === undefined) {
+            deleteHomeFolder(getProviderOrSigner,cid,file).then(res=>{
+                console.log(res);
+                setCloseDeleteModal();
+            })
+          } else {
+            deleteFolder(getProviderOrSigner,cid,file).then(res =>{ 
+                console.log(res);
+                setCloseDeleteModal();
+            })
+          }
+    }else{
+        if (cid === undefined) {
+            deleteHomeFile(getProviderOrSigner,cid,file).then(res=>{
+                console.log(res);
+                setCloseDeleteModal();
+            })
+        } else {
+            console.log(file);
+            deleteFile(getProviderOrSigner,cid,file).then(res =>{ 
+                console.log(res);
+                setCloseDeleteModal();
+            })
+        }
+    }
+    
   }
 
   return (
@@ -274,9 +303,9 @@ const  OpenDeleteModal=() => {
           <Typography id="modal-modal-title" variant="h5" component="h2">
             Are you sure you want to delete file
           </Typography>
-          <p>{cid}</p>
+          <p>{cid} {type}</p>
           
-          <DeleteIcon onClick={DeleteData} sx={{fontSize:"40px", cursor:"pointer" , margin:"3px"}} />
+          <DeleteIcon onClick={()=> DeleteData(cid)} sx={{fontSize:"40px", cursor:"pointer" , margin:"3px"}} />
         </Box>
       </Modal>
     </div>

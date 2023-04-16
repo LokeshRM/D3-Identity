@@ -86,7 +86,7 @@ export default function App({ Component, pageProps }) {
       <ModalPopUp />
       <ModalPopUpUploadFile getProviderOrSigner={getProviderOrSigner} />
       <CreateFolderModal getProviderOrSigner={getProviderOrSigner} />
-      <OpenDeleteModal />
+      <OpenDeleteModal getProviderOrSigner={getProviderOrSigner} />
       <ShareDataModal />
 
       <div className="">

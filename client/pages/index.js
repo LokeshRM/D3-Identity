@@ -83,11 +83,11 @@ export default function Home(props) {
         ).then((res) => {
             const newArray = []
             if(res){
-                 res.forEach((cid) => {
-                   getFile(cid).then((val) => {
-                     newArray.push(val[0]);
-                   });
-                 });
+                res.forEach((cid) => {
+                    getFile(cid).then((val) => {
+                        newArray.push(val[0])
+                    });
+                });
             }
             console.log(newArray);
             setfetchfiles(newArray)
@@ -106,12 +106,12 @@ export default function Home(props) {
             const newArray = []
             console.log(res);
             if(res){
-                 res.forEach((cid) => {
-                   getFolder(cid).then((val) => {
-                     console.log(val);
-                     newArray.push(val);
-                   });
-                 });
+                res.forEach((cid) => {
+                    getFolder(cid).then((val) => {
+                        console.log(val);
+                        newArray.push(val)
+                    });
+                });
             }
             console.log(newArray);
             setfetchfolders(newArray)
@@ -122,11 +122,11 @@ export default function Home(props) {
     };
 
     useEffect(() => {
-      if (walletConnected) {
-        getFiles();
-        getFolders();
-      }
-    }, [walletConnected, count2, count1, count3, count4]);
+        if (walletConnected) {
+                getFiles();
+                getFolders() 
+        }
+    }, [walletConnected,props.render]);
 
     return (
         <div>

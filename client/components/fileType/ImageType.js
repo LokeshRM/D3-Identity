@@ -7,6 +7,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Share_Remove from "../Share_Remove";
 
 const ImageType = ({ item }) => {
+  const type = "file"
   const [open, setOpen] = useState(false);
   const { openModalvariable, setOpenModal, setLink, setType } = useModalStore(
     (state) => ({
@@ -46,7 +47,7 @@ const ImageType = ({ item }) => {
                 <div className="flex justify-end mr-2 " onClick={changeDivider}>
                   <CancelIcon />
                 </div>
-                <Share_Remove changeDivider={changeDivider} cid={item.cid} />
+                <Share_Remove changeDivider={changeDivider} cid={item.cid} type={type} />
               </div>
             </div>
           ) : (

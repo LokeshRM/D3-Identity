@@ -48,7 +48,7 @@ contract Storage {
             "already cid deleted"
         );
         removeOwnerFile(
-            indexFile[msg.sender][_folder][_cid],
+            indexFile[msg.sender][_folder][_cid]-1,
             msg.sender,
             _folder
         );
@@ -93,7 +93,7 @@ contract Storage {
             "already cid deleted"
         );
         removeOwnerFolder(
-            indexFolder[msg.sender][_folder][_cid],
+            indexFolder[msg.sender][_folder][_cid]-1,
             msg.sender,
             _folder
         );
