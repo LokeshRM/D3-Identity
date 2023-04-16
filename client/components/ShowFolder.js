@@ -11,6 +11,7 @@ import { OpenDeleteModal } from "./Modal";
 
 const ShowFolder = ({ fetchedFolders, resetValues }) => {
   const [open, setOpen] = useState(false)
+  const type = "folder"
   const router = useRouter();
   const visitFolder = (cid) => {
     resetValues()
@@ -60,6 +61,7 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
                             <Share_Remove
                               changeDivider={changeDivider}
                               cid={item.cid}
+                              type = {type}
                             />
                           </div>
                         </div>

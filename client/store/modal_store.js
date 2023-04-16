@@ -46,9 +46,14 @@ const useCreateFolderStore = create((set) => ({
 const useDeleteDataStore = create((set) => ({
   openDeleteModalValue: false,
   cid: "",
+  type: "",
   setCid: (cid) =>
     set((state) => ({
       cid: (state.cid = cid),
+    })),
+  setType: (type) =>
+    set((state) => ({
+      type: (state.type = type),
     })),
   setOpenDeleteModal: () =>
     set((state) => ({

@@ -90,11 +90,13 @@ const FolderStructure = (props) => {
         getFileCids(getProviderOrSigner, cid).then(
             (res) => {
                 const newArray = [];
-                res.forEach((cid) => {
-                    getFile(cid).then((val) => {
-                        newArray.push(val[0]);
+                if(res){
+                    res.forEach((cid) => {
+                        getFile(cid).then((val) => {
+                            newArray.push(val[0])
+                        });
                     });
-                });
+                }
                 console.log(newArray);
                 setfetchfiles(newArray);
                 setTimeout(() => {
@@ -109,12 +111,14 @@ const FolderStructure = (props) => {
         getFolderCids(getProviderOrSigner, cid).then(
             (res) => {
                 const newArray = [];
-                res.forEach((c) => {
-                    getFolder(c).then((val) => {
-                        console.log(val);
-                        newArray.push(val);
+                if(res){
+                    res.forEach((cid) => {
+                        getFolder(cid).then((val) => {
+                            console.log(val);
+                            newArray.push(val)
+                        });
                     });
-                });
+                }
                 console.log(newArray);
                 setfetchfolders(newArray);
                 setTimeout(()=>{

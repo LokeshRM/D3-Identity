@@ -17,9 +17,10 @@ import {
 } from "@/store/modal_store";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { SharedWithModal } from './Modal';
-const Share_Remove = ({ changeDivider , cid}) => {
-  const { setCid, setOpenDeleteModal } = useDeleteDataStore((state) => ({
+const Share_Remove = ({ changeDivider , cid,type}) => {
+  const {setType, setCid, setOpenDeleteModal } = useDeleteDataStore((state) => ({
     setCid: state.setCid,
+    setType : state.setType,
     setOpenDeleteModal: state.setOpenDeleteModal,
   }));
 
@@ -35,6 +36,7 @@ const Share_Remove = ({ changeDivider , cid}) => {
 
   const doFinalCheck = () => {
     setCid(cid)
+    setType(type)
     setOpenDeleteModal()
   };
   const shareData = ()=>{
