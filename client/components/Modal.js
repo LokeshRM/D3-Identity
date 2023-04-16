@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from '@mui/material/Modal';
 import Box from "@mui/material/Box";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -6,14 +6,19 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { HomeUploadFolder,UploadFolder } from '@/feat/upload';
 import { useRouter } from "next/router";
-
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useSharefile } from '../store/modal_store';
+import SendIcon from "@mui/icons-material/Send";
+import { useSharedWithStore } from '../store/modal_store';
+import UserListIterator from './UserListIterator';
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
+  useDeleteDataStore,
 } from "../store/modal_store";
 import useModalStore from '@/store/modal_store';
 import DropFileInput from './draganddrop';
+import { Typography } from '@mui/material';
 const style = {
   position: "absolute",
   top: "50%",
@@ -48,6 +53,19 @@ const style2 = {
 };
 
 const style3 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  // boxShadow: 24,
+  borderRadius: 2,
+  p: 4,
+};
+
+const style4 = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -183,7 +201,7 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style3} className="no-scroll ">
-          <div>
+          <div className="m-3">
             <p>Create a Folder</p>
           </div>
           <div className="flex">
@@ -198,13 +216,13 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
               sx={{ marginRight: "10px" }}
             />
             {input.length > 0 ? (
-              <>
+              <div>
                 <Button variant="contained" onClick={createFolder}>
                   Create
                 </Button>
-              </>
+              </div>
             ) : (
-              <></>
+              <div></div>
             )}
           </div>
         </Box>
@@ -214,7 +232,148 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
 };
 
 
+const  OpenDeleteModal=() => {
+
+  const { cid,openDeleteModalValue, setCloseDeleteModal } = useDeleteDataStore(
+    (state) => ({
+      cid:state.cid,
+      openDeleteModalValue: state.openDeleteModalValue,
+      setCloseDeleteModal: state.setCloseDeleteModal,
+    })
+  );
+
+  const DeleteData = ()=>{
+    //  delete file and folder based on cid
+  }
+
+  return (
+    <div>
+      <Modal
+        open={openDeleteModalValue}
+        onClose={setCloseDeleteModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={style4}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Typography id="modal-modal-title" variant="h5" component="h2">
+            Are you sure you want to delete file
+          </Typography>
+          <p>{cid}</p>
+          
+          <DeleteIcon onClick={DeleteData} sx={{fontSize:"40px", cursor:"pointer" , margin:"3px"}} />
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+const ShareDataModal = ()=>{
+  const [input, setInput] = useState("");
+  const { cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
+    (state) => ({
+      cid:state.cid,
+      openShareFileValue: state.openShareFileValue,
+      setCloseShareFileModal: state.setCloseShareFileModal,
+    })
+  );
+  const shareData = ()=>{
+    // logic for sharing file
+    console.log(cid);
+    
+  }
+  return (
+    <div>
+      <Modal
+        open={openShareFileValue}
+        onClose={setCloseShareFileModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style3} className="no-scroll ">
+          <div className="m-3">
+            <p>Share File</p>
+          </div>
+          <div className="flex">
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              name="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              fullWidth
+              sx={{ marginRight: "10px" }}
+            />
+            {input.length > 0 ? (
+              <div>
+                <Button variant="contained" onClick={shareData}>
+                  <SendIcon />  
+                </Button>
+              </div>
+            ) : (
+              <div></div>
+            )}
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+const SharedWithModal = ({cid})=>{
+  const [userList, setuserList] = useState([])
+  const { openSharedWithStore, setCloseSharedWithModal } = useSharedWithStore(
+    (state) => ({
+      openSharedWithStore: state.openSharedWithStore,
+      setCloseSharedWithModal: state.setCloseSharedWithModal,
+    })
+  ); 
+  const fetchDataofSharedWith = () => {
+    console.log(cid);
+  };
+  useEffect(()=>{
+    fetchDataofSharedWith()
+  },[])
+  
+  return (
+    <div>
+      <Modal
+        open={openSharedWithStore}
+        onClose={setCloseSharedWithModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style3} className="no-scroll ">
+          <div className="m-3">
+            <p>Share File</p>
+          </div>
+          <div className="flex">
+            {cid}
+            {userList.map((user) => {
+              return <UserListIterator user={user} />;
+            })}
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
 export default ModalPopUp;
 
-export { ModalPopUpUploadFile, CreateFolderModal };
+export {
+  ModalPopUpUploadFile,
+  CreateFolderModal,
+  OpenDeleteModal,
+  ShareDataModal,
+  SharedWithModal,
+};
 

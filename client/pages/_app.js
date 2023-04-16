@@ -5,11 +5,19 @@ import Navbar from "@/components/navbar";
 import Web3Modal from "web3modal";
 import { providers, Contract } from "ethers";
 import { useRef } from 'react';
+import { useRouter } from "next/router";
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
+  useSharedWithStore,
 } from "../store/modal_store";
-import { ModalPopUpUploadFile, CreateFolderModal } from "../components/Modal";
+import {
+  ModalPopUpUploadFile,
+  CreateFolderModal,
+  OpenDeleteModal,
+  ShareDataModal,
+  SharedWithModal,
+} from "../components/Modal";
 
 export default function App({ Component, pageProps }) {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -26,6 +34,8 @@ export default function App({ Component, pageProps }) {
   const { setFolderModal } = useCreateFolderStore((state) => ({
     setFolderModal: state.setFolderModal,
   }));
+
+  
 
    const getProviderOrSigner = async (needSigner = false) => {
      const provider = await web3ModalRef.current.connect();
@@ -57,6 +67,7 @@ export default function App({ Component, pageProps }) {
        console.error(err);
      }
    };
+   const router = useRouter()
 
    useEffect(() => {
      if (!walletConnected) {
@@ -65,8 +76,9 @@ export default function App({ Component, pageProps }) {
          providerOptions: {},
          disableInjectedProvider: false,
        });
+     }else if(forced){
+        connectWallet();
      }
-     connectWallet();
    }, [walletConnected]);
 
   return (
@@ -74,6 +86,9 @@ export default function App({ Component, pageProps }) {
       <ModalPopUp />
       <ModalPopUpUploadFile getProviderOrSigner={getProviderOrSigner} />
       <CreateFolderModal getProviderOrSigner={getProviderOrSigner} />
+      <OpenDeleteModal />
+      <ShareDataModal />
+      
       <div className="">
         <Navbar
           walletConnected={walletConnected}
@@ -85,24 +100,29 @@ export default function App({ Component, pageProps }) {
           }}
         />
       </div>
-      <div className="grid grid-cols-5 gap-3">
-        <div className="h-[100vh] bg-[#F6F9FD]  ">
-          <div onClick={setUploadModal}>New file</div>
-          <div onClick={setFolderModal}>New Folder</div>
-          <div className="cursor-pointer" onClick={() => setOpenFiles(0)}>
-            files
+      {walletConnected && (
+        <>
+          <div className="grid grid-cols-5 gap-3">
+            <div className="h-[100vh] bg-[#F6F9FD]  ">
+              <div onClick={setUploadModal}>New file</div>
+              <div onClick={setFolderModal}>New Folder</div>
+              <div className="cursor-pointer" onClick={() => setOpenFiles(0)}>
+                files
+              </div>
+              <div className="cursor-pointer" onClick={() => setOpenFiles(1)}>
+                shared with me
+              </div>
+            </div>
+            <div className="h-[100vh]  col-span-4  ">
+              <Component
+                key={router.asPath}
+                {...pageProps}
+                openFiles={openFiles}
+              />
+            </div>
           </div>
-          <div className="cursor-pointer" onClick={() => setOpenFiles(1)}>
-            shared with me
-          </div>
-        </div>
-        <div className="h-[100vh]  col-span-4  ">
-          <Component
-            {...pageProps}
-            openFiles={openFiles}
-          />
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }

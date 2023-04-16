@@ -20,6 +20,15 @@ const FolderStructure = (props) => {
     const [walletAddress, setWalletAddress] = useState();
     const web3ModalRef = useRef();
 
+    const resetValues = () => {
+      setfetchfiles([]);
+      setfetchfolders([]);
+      setState(false);
+      setStateFolder(false);
+      setWalletConnected(false);
+    };
+
+
     const getProviderOrSigner = async (needSigner = false) => {
         const provider = await web3ModalRef.current.connect();
         const web3Provider = new providers.Web3Provider(provider);
@@ -52,27 +61,30 @@ const FolderStructure = (props) => {
     };
 
     useEffect(() => {
-        if (!walletConnected) {
-            web3ModalRef.current = new Web3Modal({
-                network: "sepolia",
-                providerOptions: {},
-                disableInjectedProvider: false,
-            });
-        }
-        connectWallet();
-    }, [walletConnected]);
+        console.log('hello world inside cid file');
+        
+      if (!walletConnected) {
+        web3ModalRef.current = new Web3Modal({
+          network: "sepolia",
+          providerOptions: {},
+          disableInjectedProvider: false,
+        });
+      }
+      connectWallet();
+    }, [walletConnected, fetchedFiles, router.query.slug]);
 
     useEffect(() => {
-        if (router.isReady) {
-            const { cid } = router.query;
-            console.log(cid)
-            setCid(cid);
-            if (walletConnected) {
-                getFiles(cid);
-                getFolders(cid);
-            }
+      if (router.isReady) {
+        const { cid } = router.query;
+        console.log(cid);
+        setCid(cid);
+        if (walletConnected) {
+          getFiles(cid);
+          getFolders(cid);
         }
-    }, [walletConnected]);
+      }
+      connectWallet();
+    }, [walletConnected, router.query.slug]);
 
     const getFiles = async (cid) => {
         getFileCids(getProviderOrSigner, cid).then(
@@ -113,21 +125,25 @@ const FolderStructure = (props) => {
     };
 
    
-    return <>{props.openFiles == 0 ? <div> 
-        <div>
-    
-        {
-            state && <ShowFiles fetchedFiles={fetchedFiles} />
-        }
-        </div>
-        <div>
-            {
-                stateFolder && <ShowFolder fetchedFolders={fetchedFolders} />
-            }
-        </div>
-        </div> : <div>
-           {}
-        </div>}</>;
+    return (
+      <>
+        {props.openFiles == 0 ? (
+          <div>
+            <div>{state && <ShowFiles fetchedFiles={fetchedFiles} />}</div>
+            <div>
+              {stateFolder && (
+                <ShowFolder
+                  fetchedFolders={fetchedFolders}
+                  resetValues={resetValues}
+                />
+              )}
+            </div>
+          </div>
+        ) : (
+          <div>{}</div>
+        )}
+      </>
+    );
 };
 
 export default FolderStructure;

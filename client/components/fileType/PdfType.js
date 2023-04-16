@@ -26,10 +26,10 @@ const PdfType = ({item}) => {
     >
       <div className="lower-container flex justify-between">
         <div className="flex justify-start">
-          <PictureAsPdfIcon sx={{ margin: "1px" }} />
+          <PictureAsPdfIcon sx={{ marginRight: "5px" }} />
           <p className="text-sm m-[1px] ">{item.name}</p>
         </div>
-        <div className="">
+        <div className="hover:bg-blue-50 rounded-lg ">
           <MoreVertIcon />
         </div>
       </div>
