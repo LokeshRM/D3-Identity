@@ -31,7 +31,7 @@ export const HomeUploadFile = async (file, getProviderOrSigner) => {
         const tx = await contract.addFile(cid, await signer.getAddress());
         await tx.wait();
         console.log("done uploaded home file!");
-        return true;
+        return cid;
     } catch (err) {
         console.log(err);
     }

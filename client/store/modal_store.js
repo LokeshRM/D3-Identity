@@ -95,6 +95,25 @@ const useSharedWithStore = create((set) => ({
     })),
 }));
 
+const useLoaderModal = create((set)=>({
+  const1:0,
+  const2:1,
+  const3:0,
+  const4:0,
+  setConst1:()=>set((state)=>({
+    const1:state.count1 + 1
+  })),
+  setConst2:()=>set((state)=>({
+    const2:state.count2 + 1
+  })),
+  setConst3:()=>set((state)=>({
+    const3:state.count3 + 1
+  })),
+  setConst4:()=>set((state)=>({
+    const4:state.count4 + 1
+  }))
+}))
+
 export default useModalStore
 
 export {
@@ -103,4 +122,5 @@ export {
   useDeleteDataStore,
   useSharefile,
   useSharedWithStore,
+  useLoaderModal,
 };

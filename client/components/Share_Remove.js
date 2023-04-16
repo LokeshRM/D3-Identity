@@ -36,15 +36,18 @@ const Share_Remove = ({ changeDivider , cid}) => {
   const doFinalCheck = () => {
     setCid(cid)
     setOpenDeleteModal()
+    changeDivider()
   };
   const shareData = ()=>{
     setCidShareFile(cid)
     setOpenShareFileModal()
+    changeDivider()
   }
 
   const sharedWith = ()=>{
     setCidSharedWith(cid)
     setOpenSharedWithModal()
+    changeDivider()
   }
 
   return (

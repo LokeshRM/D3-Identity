@@ -3,6 +3,7 @@ import { ImageConfig } from "./config/ImageConfig";
 import { HomeUploadFile, UploadFile } from "../feat/upload";
 import { useRouter } from "next/router";
 import { useModalUploadFileStore } from "@/store/modal_store";
+import { useLoaderModal } from "@/store/modal_store";
 
 const DropFileInput = ({ getProviderOrSigner }) => {
   const wrapperRef = useRef(null);
@@ -10,6 +11,11 @@ const DropFileInput = ({ getProviderOrSigner }) => {
 
   const {closeUploadModal } = useModalUploadFileStore((state) => ({
     closeUploadModal: state.closeUploadModal,
+  }));
+
+  const { setConst1, setConst2 } = useLoaderModal((state) => ({
+    setConst1:state.setConst1,
+    setConst2:state.setConst2,
   }));
 
   const [fileList, setFileList] = useState([]);
@@ -40,13 +46,17 @@ const DropFileInput = ({ getProviderOrSigner }) => {
       HomeUploadFile(fileList, getProviderOrSigner).then(res=>{console.log(res);
         setFileList([]);
         closeUploadModal();
+        setConst1()
       })
     } else {
       UploadFile(fileList,cid,getProviderOrSigner).then(res=>{console.log(res);
         setFileList([]);
         closeUploadModal();
+        setConst2();
       })
     }
+    // getFile()
+
   };
 
   return (

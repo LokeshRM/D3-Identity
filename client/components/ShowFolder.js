@@ -34,12 +34,12 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
     <div>
    
       <div className="grid_folder">
-        <p>Folders</p>
+        
         <div className="grid_folder_contain ">
           {fetchedFolders.map((item) => {
             return (
               <>
-                <div className=" card-component  hover:bg-gray-300 ">
+                <div className=" card-component  hover:bg-[#def9fb] ">
                   <div className="lower-container flex justify-between">
                     <div className="flex justify-start">
                       <CreateNewFolderIcon sx={{ marginRight: "5px" }} />
@@ -66,9 +66,7 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
                       ) : (
                         <div></div>
                       )}
-                      <MoreVertIcon
-                        onClick={changeDivider}
-                      />
+                      <MoreVertIcon onClick={changeDivider} />
                     </div>
                   </div>
                   <div
