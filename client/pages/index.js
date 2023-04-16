@@ -8,6 +8,8 @@ import { getFile,getFolder } from "@/feat/getfile";
 import { useLoaderModal } from "@/store/modal_store";
 import useFileStoreModal from "@/store/filesStore";
 import Loader from "@/components/Loader";
+import { getFilesSharedMe, getFoldersSharedMe } from "@/feat/helper";
+
 export default function Home(props) {
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
@@ -148,7 +150,7 @@ export default function Home(props) {
 
     return (
       <div>
-        {load? (
+        {load ? (
           <div>
             <Loader />
           </div>
@@ -175,7 +177,19 @@ export default function Home(props) {
                 </div>
               </div>
             ) : (
-              <div>{}</div>
+              <div>
+                {
+                  <button
+                    className="p-4 bg-blue-500 hover:bg-blue-300"
+                    onClick={() => {
+                      getFilesSharedMe(getProviderOrSigner);
+                      getFoldersSharedMe(getProviderOrSigner);
+                    }}
+                  >
+                    GET files in
+                  </button>
+                }
+              </div>
             )}
           </div>
         )}
