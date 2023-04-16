@@ -304,18 +304,46 @@ const  OpenDeleteModal=({getProviderOrSigner}) => {
   );
 }
 
-const ShareDataModal = ()=>{
+const ShareDataModal = ({getProviderOrSigner})=>{
+    const router = useRouter();
   const [input, setInput] = useState("");
-  const { cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
+  const {type, cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
     (state) => ({
       cid:state.cid,
+      type:state.type,
       openShareFileValue: state.openShareFileValue,
       setCloseShareFileModal: state.setCloseShareFileModal,
     })
   );
-  const shareData = ()=>{
-    // logic for sharing file
-    console.log(cid);
+  const shareData = (file)=>{
+    const { cid } = router.query;
+    // if(type == "folder"){
+    //     if (cid === undefined) {
+    //         deleteHomeFolder(getProviderOrSigner,cid,file).then(res=>{
+    //             console.log(res);
+    //             setCloseDeleteModal();
+    //         })
+    //       } else {
+    //         deleteFolder(getProviderOrSigner,cid,file).then(res =>{ 
+    //             console.log(res);
+    //             setCloseDeleteModal();
+    //         })
+    //       }
+    // }else{
+    //     if (cid === undefined) {
+    //         deleteHomeFile(getProviderOrSigner,cid,file).then(res=>{
+    //             console.log(res);
+    //             setCloseDeleteModal();
+    //         })
+    //     } else {
+    //         console.log(file);
+    //         deleteFile(getProviderOrSigner,cid,file).then(res =>{ 
+    //             console.log(res);
+    //             setCloseDeleteModal();
+    //         })
+    //     }
+    // }
+    console.log(type);
     
   }
   return (
@@ -343,7 +371,7 @@ const ShareDataModal = ()=>{
             />
             {input.length > 0 ? (
               <div>
-                <Button variant="contained" onClick={shareData}>
+                <Button variant="contained" onClick={()=>shareData(cid)}>
                   <SendIcon />  
                 </Button>
               </div>

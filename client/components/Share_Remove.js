@@ -24,7 +24,8 @@ const Share_Remove = ({ changeDivider , cid,type}) => {
     setOpenDeleteModal: state.setOpenDeleteModal,
   }));
 
-  const { setCidShareFile, setOpenShareFileModal } = useSharefile((state) => ({
+  const {setTypeShareFile, setCidShareFile, setOpenShareFileModal } = useSharefile((state) => ({
+    setTypeShareFile: state.setTypeShareFile,
     setCidShareFile:state.setCidShareFile,
     setOpenShareFileModal: state.setOpenShareFileModal,
   }));
@@ -41,6 +42,7 @@ const Share_Remove = ({ changeDivider , cid,type}) => {
   };
   const shareData = ()=>{
     setCidShareFile(cid)
+    setTypeShareFile(type)
     setOpenShareFileModal()
   }
 

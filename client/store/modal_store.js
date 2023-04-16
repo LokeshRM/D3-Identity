@@ -69,9 +69,14 @@ const useDeleteDataStore = create((set) => ({
 const useSharefile = create((set) => ({
   openShareFileValue: false,
   cid: "",
+  type:"",
   setCidShareFile: (cid) =>
     set((state) => ({
       cid: (state.cid = cid),
+    })),
+  setTypeShareFile: (type) =>
+    set((state) => ({
+      cid: (state.type = type),
     })),
   setOpenShareFileModal: () =>
     set((state) => ({
