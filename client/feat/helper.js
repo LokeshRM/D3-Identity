@@ -117,25 +117,25 @@ export const getSharedFiles = async(getProviderOrSigner, cid)=>{
         const provider = await getProviderOrSigner();
         const contract = new Contract(address, abi, provider );
         const signer = await provider.getSigner();
-        const tx = await contract.getSharedFiles(await signer.getAddress(), cid);
-        await tx.wait();
+        const data = await contract.getSharedFiles(await signer.getAddress(), cid);
         console.log("got users who has access to these file!");
-        return true;
+        console.log(data);
+        return data;
     } catch (err) {
         console.log(err);
     }
 }
-
+ 
 
 export const getSharedFolders = async(getProviderOrSigner, cid)=>{
     try {
         const provider = await getProviderOrSigner();
         const contract = new Contract(address, abi, provider );
         const signer = await provider.getSigner();
-        const tx = await contract.getSharedFiles(await signer.getAddress(), cid);
-        await tx.wait();
+        const data = await contract.getSharedFolders(await signer.getAddress(), cid);
         console.log("got users who has access to these folder!");
-        return true;
+        console.log(data);
+        return data;
     } catch (err) {
         console.log(err);
     }

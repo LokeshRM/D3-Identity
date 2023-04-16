@@ -6,7 +6,7 @@ import ImageType from "./fileType/ImageType";
 import PdfType from "./fileType/PdfType";
 import VedioType from "./fileType/VedioType";
 
-const ShowFiles = ({ fetchedFiles }) => {
+const ShowFiles = ({ fetchedFiles,getProviderOrSigner }) => {
     const [decodedFile, setDecodeFile] = useState([]);
     const getFileType = (filename) => {
         let ind = filename.lastIndexOf(".");
@@ -26,7 +26,7 @@ const ShowFiles = ({ fetchedFiles }) => {
                     getFileType(item.name) === "png" ||
                     getFileType(item.name) === "jpeg"
                 ) {
-                    return <ImageType item={item} />;
+                    return <ImageType getProviderOrSigner={getProviderOrSigner} item={item} />;
                 }
                 if (getFileType(item.name) === "pdf") {
                     return <PdfType item={item} />;

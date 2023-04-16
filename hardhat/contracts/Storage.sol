@@ -38,6 +38,7 @@ contract Storage {
         require(_index < cidFile[_user][_folder].length, "index out of bound");
         for (uint i = _index; i < cidFile[_user][_folder].length - 1; i++) {
             cidFile[_user][_folder][i] = cidFile[_user][_folder][i + 1];
+            indexFile[_user][_folder][cidFile[_user][_folder][i]] = i + 1;
         }
         cidFile[_user][_folder].pop();
     }
@@ -48,7 +49,7 @@ contract Storage {
             "already cid deleted"
         );
         removeOwnerFile(
-            indexFile[msg.sender][_folder][_cid]-1,
+            indexFile[msg.sender][_folder][_cid] - 1,
             msg.sender,
             _folder
         );
@@ -83,6 +84,7 @@ contract Storage {
         );
         for (uint i = _index; i < cidFolder[_user][_folder].length - 1; i++) {
             cidFolder[_user][_folder][i] = cidFolder[_user][_folder][i + 1];
+            indexFolder[_user][_folder][cidFolder[_user][_folder][i]] = i + 1;
         }
         cidFolder[_user][_folder].pop();
     }
@@ -93,7 +95,7 @@ contract Storage {
             "already cid deleted"
         );
         removeOwnerFolder(
-            indexFolder[msg.sender][_folder][_cid]-1,
+            indexFolder[msg.sender][_folder][_cid] - 1,
             msg.sender,
             _folder
         );

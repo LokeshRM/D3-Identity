@@ -6,7 +6,7 @@ import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Share_Remove from "../Share_Remove";
 
-const ImageType = ({ item }) => {
+const ImageType = ({ item,getProviderOrSigner }) => {
   const type = "file"
   const [open, setOpen] = useState(false);
   const { openModalvariable, setOpenModal, setLink, setType } = useModalStore(
@@ -34,7 +34,7 @@ const ImageType = ({ item }) => {
   };
 
   return (
-    <div className="card-component  hover:bg-gray-300 ">
+    <div className="card-component  hover:bg-[#def9fb]   ">
       <div className="lower-container flex justify-between">
         <div className="flex justify-start">
           <PhotoIcon sx={{ marginRight: "5px" }} />
@@ -47,7 +47,7 @@ const ImageType = ({ item }) => {
                 <div className="flex justify-end mr-2 " onClick={changeDivider}>
                   <CancelIcon />
                 </div>
-                <Share_Remove changeDivider={changeDivider} cid={item.cid} type={type} />
+                <Share_Remove getProviderOrSigner={getProviderOrSigner} changeDivider={changeDivider} cid={item.cid} type={type} />
               </div>
             </div>
           ) : (
@@ -56,7 +56,7 @@ const ImageType = ({ item }) => {
           <MoreVertIcon onClick={changeDivider} />
         </div>
       </div>
-      <div className="upper-container" onClick={seeFullImage} >
+      <div className="upper-container" onClick={seeFullImage}>
         <div className="image-container cursor-pointer ">
           <img src={item.link} className="communities-logo" />
         </div>

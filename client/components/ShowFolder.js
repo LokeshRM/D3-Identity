@@ -7,9 +7,10 @@ import { useRouter } from "next/router";
 import Share_Remove from "./Share_Remove";
 import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { OpenDeleteModal } from "./Modal";
+import { OpenDeleteModal, SharedWithModal } from "./Modal";
 
-const ShowFolder = ({ fetchedFolders, resetValues }) => {
+
+const ShowFolder = ({ fetchedFolders, resetValues,getProviderOrSigner }) => {
   const [open, setOpen] = useState(false)
   const type = "folder"
   const router = useRouter();
@@ -35,12 +36,13 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
     <div>
    
       <div className="grid_folder">
-        <p>Folders</p>
+        
         <div className="grid_folder_contain ">
-          {fetchedFolders.map((item) => {
+          {fetchedFolders.map((item,i) => {
             return (
-              <>
-                <div className=" card-component  hover:bg-gray-300 ">
+              <div>
+              <SharedWithModal getProviderOrSigner={getProviderOrSigner} cid={item.cid} type={type} />
+                <div key={i} className=" card-component  hover:bg-[#def9fb] ">
                   <div className="lower-container flex justify-between">
                     <div className="flex justify-start">
                       <CreateNewFolderIcon sx={{ marginRight: "5px" }} />
@@ -59,6 +61,7 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
                               <CancelIcon />
                             </div>
                             <Share_Remove
+                            getP  roviderOrSigner={getProviderOrSigner}
                               changeDivider={changeDivider}
                               cid={item.cid}
                               type = {type}
@@ -68,9 +71,7 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
                       ) : (
                         <div></div>
                       )}
-                      <MoreVertIcon
-                        onClick={changeDivider}
-                      />
+                      <MoreVertIcon onClick={changeDivider} />
                     </div>
                   </div>
                   <div
@@ -86,7 +87,7 @@ const ShowFolder = ({ fetchedFolders, resetValues }) => {
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>

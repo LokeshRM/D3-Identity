@@ -11,6 +11,7 @@ import { useSharefile } from '../store/modal_store';
 import SendIcon from "@mui/icons-material/Send";
 import { useSharedWithStore } from '../store/modal_store';
 import UserListIterator from './UserListIterator';
+import { useLoaderModal } from '../store/modal_store';
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
@@ -19,7 +20,8 @@ import {
 import useModalStore from '@/store/modal_store';
 import DropFileInput from './draganddrop';
 import { Typography } from '@mui/material';
-import { deleteFile, deleteFolder, deleteHomeFile, deleteHomeFolder } from '@/feat/helper';
+import { deleteFile, deleteFolder, deleteHomeFile, deleteHomeFolder, giveAccessFile, giveAccessFolder,getSharedFiles,getSharedFolders } from '@/feat/helper';
+import { logger } from 'ethers';
 const style = {
   position: "absolute",
   top: "50%",
@@ -53,7 +55,7 @@ const style2 = {
   p: 4,
 };
 
-const style3 = {
+const style3 = {    
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -178,6 +180,11 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
     })
   );
 
+  const { setConst3, setConst4 } = useLoaderModal((state) => ({
+    setConst3: state.setConst3,
+    setConst4:state.setConst4
+  }));
+
   const handleClose = () => closeFolderModal();
   const createFolder = () => {
     const { cid } = router.query;
@@ -185,11 +192,13 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
       HomeUploadFolder(input, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setConst3()
       })
     } else {
       UploadFolder(input,cid, getProviderOrSigner).then((res)=>{
         setInput("")
         closeFolderModal()
+        setConst4()
       })
     }
   };
@@ -307,44 +316,30 @@ const  OpenDeleteModal=({getProviderOrSigner}) => {
 const ShareDataModal = ({getProviderOrSigner})=>{
     const router = useRouter();
   const [input, setInput] = useState("");
-  const {type, cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
+  const {type, _cid,openShareFileValue, setCloseShareFileModal } = useSharefile(
     (state) => ({
-      cid:state.cid,
+      _cid:state._cid,
       type:state.type,
       openShareFileValue: state.openShareFileValue,
       setCloseShareFileModal: state.setCloseShareFileModal,
     })
   );
-  const shareData = (file)=>{
+  const shareData = ()=>{
     const { cid } = router.query;
-    // if(type == "folder"){
-    //     if (cid === undefined) {
-    //         deleteHomeFolder(getProviderOrSigner,cid,file).then(res=>{
-    //             console.log(res);
-    //             setCloseDeleteModal();
-    //         })
-    //       } else {
-    //         deleteFolder(getProviderOrSigner,cid,file).then(res =>{ 
-    //             console.log(res);
-    //             setCloseDeleteModal();
-    //         })
-    //       }
-    // }else{
-    //     if (cid === undefined) {
-    //         deleteHomeFile(getProviderOrSigner,cid,file).then(res=>{
-    //             console.log(res);
-    //             setCloseDeleteModal();
-    //         })
-    //     } else {
-    //         console.log(file);
-    //         deleteFile(getProviderOrSigner,cid,file).then(res =>{ 
-    //             console.log(res);
-    //             setCloseDeleteModal();
-    //         })
-    //     }
-    // }
-    console.log(type);
-    
+    if(type == "folder"){
+        giveAccessFolder(getProviderOrSigner,input,_cid).then(res =>{ 
+              console.log(res);
+              setCloseShareFileModal();
+          })
+          
+    }else{
+          giveAccessFile(getProviderOrSigner,input,_cid).then(res =>{ 
+                console.log(res);
+                setCloseShareFileModal();
+            })
+    }
+ 
+
   }
   return (
     <div>
@@ -371,7 +366,7 @@ const ShareDataModal = ({getProviderOrSigner})=>{
             />
             {input.length > 0 ? (
               <div>
-                <Button variant="contained" onClick={()=>shareData(cid)}>
+                <Button variant="contained" onClick={()=>shareData()}>
                   <SendIcon />  
                 </Button>
               </div>
@@ -385,18 +380,31 @@ const ShareDataModal = ({getProviderOrSigner})=>{
   );
 }
 
-const SharedWithModal = ({cid})=>{
+const SharedWithModal = ({cid,type,getProviderOrSigner})=>{
   const [userList, setuserList] = useState([])
+
   const { openSharedWithStore, setCloseSharedWithModal } = useSharedWithStore(
     (state) => ({
       openSharedWithStore: state.openSharedWithStore,
       setCloseSharedWithModal: state.setCloseSharedWithModal,
     })
   ); 
-  const fetchDataofSharedWith = () => {
-    console.log(cid);
-  };
+  
   useEffect(()=>{
+    const fetchDataofSharedWith = async() => {
+        console.log(type);
+        if(type == "folder"){
+            getSharedFolders(getProviderOrSigner,cid).then((res)=>{
+                console.log(res);
+                setuserList(res)
+            })
+        }else{
+            getSharedFiles(getProviderOrSigner,cid).then(res=>{
+                console.log(res);
+                setuserList(res)
+            })
+        }
+    };
     fetchDataofSharedWith()
   },[])
   
@@ -412,11 +420,10 @@ const SharedWithModal = ({cid})=>{
           <div className="m-3">
             <p>Share File</p>
           </div>
-          <div className="flex">
-            {cid}
+          <div className="flex justify-center items-center	flex-col">
             {userList.map((user) => {
               return <UserListIterator user={user} />;
-            })}
+            })} 
           </div>
         </Box>
       </Modal>
