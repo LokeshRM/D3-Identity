@@ -41,7 +41,7 @@ const ShowFolder = ({ fetchedFolders, resetValues,getProviderOrSigner }) => {
           {fetchedFolders.map((item,i) => {
             return (
               <div>
-              <SharedWithModal getProviderOrSigner={getProviderOrSigner} cid={item.cid} type={type} />
+              {/* <SharedWithModal getProviderOrSigner={getProviderOrSigner} cid={item.cid} type={type} /> */}
                 <div key={i} className=" card-component  hover:bg-[#def9fb] ">
                   <div className="lower-container flex justify-between">
                     <div className="flex justify-start">

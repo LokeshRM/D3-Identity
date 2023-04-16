@@ -190,6 +190,18 @@ contract Storage {
         return trackFolder[_user][_cid];
     }
 
+    function getOwnedFiles(
+        address _user
+    ) external view returns (string[] memory) {
+        return sharedFile[_user];
+    }
+
+    function getOwnedFolders(
+        address _user
+    ) external view returns (string[] memory) {
+        return sharedFile[_user];
+    }
+
     receive() external payable {}
 
     fallback() external payable {}

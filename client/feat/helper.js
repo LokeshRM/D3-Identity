@@ -83,9 +83,6 @@ export const giveAccessFolder = async(getProviderOrSigner, user, cid)=>{
     }
 }
 
-
-
-
 export const revokeAccessFile = async(getProviderOrSigner, user, cid)=>{
     try {
         const signer = await getProviderOrSigner(true);
@@ -140,4 +137,34 @@ export const getSharedFolders = async(getProviderOrSigner, cid)=>{
         console.log(err);
     }
 }
+
+export const getFilesSharedMe= async(getProviderOrSigner)=>{
+    try {
+        const provider = await getProviderOrSigner();
+        const contract = new Contract(address, abi, provider );
+        const signer = await provider.getSigner();
+        const data = await contract.getOwnedFiles(await signer.getAddress());
+        console.log("got files shared with you!");
+        console.log(data);
+        //return data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const getFoldersSharedMe= async(getProviderOrSigner)=>{
+    try {
+        const provider = await getProviderOrSigner();
+        const contract = new Contract(address, abi, provider );
+        const signer = await provider.getSigner();
+        const data = await contract.getOwnedFolders(await signer.getAddress());
+        console.log("got folders shared with you!");
+        console.log(data);
+        //return data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
 

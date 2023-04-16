@@ -76,7 +76,7 @@ const useSharefile = create((set) => ({
     })),
   setTypeShareFile: (type) =>
     set((state) => ({
-      cid: (state.type = type),
+      type: (state.type = type),
     })),
   setOpenShareFileModal: () =>
     set((state) => ({
@@ -90,13 +90,13 @@ const useSharefile = create((set) => ({
 
 const useSharedWithStore = create((set) => ({
   openSharedWithStore: false,
-  cid: "",
+  _cid: "",
   type:"",
   setCidSharedWith: (cid) =>
     set((state) => ({
-      cid: (state.cid = cid),
+      _cid: (state.cid = cid),
     })),
-  setTypeShareFile: (type) =>
+  setTypeSharedFile: (type) =>
     set((state) => ({
       cid: (state.type = type),
     })),

@@ -357,6 +357,7 @@ const ShareDataModal = ({getProviderOrSigner})=>{
   const shareData = ()=>{
     setLoad(true)
     const { cid } = router.query;
+    console.log(type);
     if(type == "folder"){
         giveAccessFolder(getProviderOrSigner,input,_cid).then(res =>{ 
               console.log(res);
@@ -371,7 +372,6 @@ const ShareDataModal = ({getProviderOrSigner})=>{
                 setLoad(false)
             })
     }
- 
 
   }
   return (
@@ -415,39 +415,40 @@ const ShareDataModal = ({getProviderOrSigner})=>{
   );
 }
 
-const SharedWithModal = ({cid,type,getProviderOrSigner})=>{
+const SharedWithModal = ({getProviderOrSigner})=>{
   const [userList, setuserList] = useState([])
 
-  const { openSharedWithStore, setCloseSharedWithModal } = useSharedWithStore(
+  const {type, _cid, openSharedWithStore, setCloseSharedWithModal } = useSharedWithStore(
     (state) => ({
+      _cid:state._cid,
+      type:state.type,
       openSharedWithStore: state.openSharedWithStore,
       setCloseSharedWithModal: state.setCloseSharedWithModal,
     })
   ); 
   
-  useEffect(()=>{
     const fetchDataofSharedWith = async() => {
         console.log(type);
+        console.log(_cid);
         if(type == "folder"){
-            getSharedFolders(getProviderOrSigner,cid).then((res)=>{
+            getSharedFolders(getProviderOrSigner,_cid).then((res)=>{
                 console.log(res);
                 setuserList(res)
             })
         }else{
-            getSharedFiles(getProviderOrSigner,cid).then(res=>{
+            getSharedFiles(getProviderOrSigner,_cid).then(res=>{
                 console.log(res);
                 setuserList(res)
             })
         }
     };
-    fetchDataofSharedWith()
-  },[])
   
   return (
     <div>
       <Modal
         open={openSharedWithStore}
-        onClose={setCloseSharedWithModal}
+        onClose={()=>{setCloseSharedWithModal();
+        setuserList([])}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -456,7 +457,8 @@ const SharedWithModal = ({cid,type,getProviderOrSigner})=>{
             <p>Share File</p>
           </div>
           <div className="flex justify-center items-center	flex-col">
-            {userList.map((user) => {
+          <button onClick={fetchDataofSharedWith} className="p-4 bg-blue-600 hover:bg-blue-400">Refresh</button>
+            {userList && userList.map((user) => {
               return <UserListIterator user={user} />;
             })} 
           </div>
