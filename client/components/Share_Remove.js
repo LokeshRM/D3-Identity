@@ -63,7 +63,7 @@ const Share_Remove = ({getProviderOrSigner, changeDivider , cid,type}) => {
         sx={{
           width: "100%",
           maxWidth: 460,
-          bgcolor: "#1A73E8",
+          bgcolor: "#FFFFFF",
           borderRadius: "7px",
         }}
       >

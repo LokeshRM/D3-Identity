@@ -13,28 +13,23 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 const UserListIterator = ({user}) => {
   const theme = useTheme();
   return (
-    <Card sx={{ display: 'flex' }}>
-      <Box sx={{ display: 'flex' , alignItems:"center" }}>
-      {
-        user[1]&&(
-          <CardContent  >
-            {user[0]}
+    <Card sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {user[1] && <CardContent>{user[0]}</CardContent>}
+        {user[1] && (
+          <CardContent>
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: "red" }}
+              style={{ backgroundColor: "blue" }}
+            >
+              Remove
+            </Button>
           </CardContent>
-        )
-      }
-      {
-        user[1]&&(
-          <CardContent >
-            <Button variant='contained' sx={{backgroundColor:"red"}} >Remove</Button>
-          </CardContent>
-        )
-      }
-        
-        
+        )}
       </Box>
-      
     </Card>
-  )
+  );
 }
 
 export default UserListIterator

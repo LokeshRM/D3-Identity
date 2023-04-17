@@ -146,7 +146,7 @@ export const getFilesSharedMe= async(getProviderOrSigner)=>{
         const data = await contract.getOwnedFiles(await signer.getAddress());
         console.log("got files shared with you!");
         console.log(data);
-        //return data;
+        return data;
     } catch (err) {
         console.log(err);
     }
@@ -160,7 +160,7 @@ export const getFoldersSharedMe= async(getProviderOrSigner)=>{
         const data = await contract.getOwnedFolders(await signer.getAddress());
         console.log("got folders shared with you!");
         console.log(data);
-        //return data;
+        return data;
     } catch (err) {
         console.log(err);
     }

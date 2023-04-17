@@ -7,6 +7,8 @@ import ShowFiles from "@/components/ShowFiles";
 import ShowFolder from "@/components/ShowFolder";
 import { getFile, getFolder } from "@/feat/getfile";
 import { useLoaderModal } from "@/store/modal_store";
+import Loader from "@/components/Loader";
+
 const FolderStructure = (props) => {
     const [presentCid, setCid] = useState();
     const router = useRouter();
@@ -16,6 +18,8 @@ const FolderStructure = (props) => {
       count3:state.count3,
       count4:state.count4,
     }))
+
+    const [load, setLoad] = useState(false)
 
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
@@ -66,7 +70,7 @@ const FolderStructure = (props) => {
     };
 
     useEffect(() => {
-      console.log("hello world inside cid file");
+      setLoad(true)
 
       if (!walletConnected) {
         web3ModalRef.current = new Web3Modal({
@@ -128,30 +132,46 @@ const FolderStructure = (props) => {
                 setfetchfolders(newArray);
                 setTimeout(()=>{
                     setStateFolder(true)
+                    setLoad(false)
                 },1000)
             }
         );
     };
 
-   
     return (
-      <>
-        {props.openFiles == 0 ? (
+      <div>
+        {load ? (
           <div>
-            <div>{state && <ShowFiles getProviderOrSigner={getProviderOrSigner} fetchedFiles={fetchedFiles} />}</div>
-            <div>
-              {stateFolder && (
-                <ShowFolder getProviderOrSigner={getProviderOrSigner}
-                  fetchedFolders={fetchedFolders}
-                  resetValues={resetValues}
-                />
-              )}
-            </div>
+            <Loader />
           </div>
         ) : (
-          <div>{}</div>
+          <div>
+            {props.openFiles == 0 ? (
+              <div>
+                <div>
+                  {state && (
+                    <ShowFiles
+                      getProviderOrSigner={getProviderOrSigner}
+                      fetchedFiles={fetchedFiles}
+                    />
+                  )}
+                </div>
+                <div>
+                  {stateFolder && (
+                    <ShowFolder
+                      getProviderOrSigner={getProviderOrSigner}
+                      fetchedFolders={fetchedFolders}
+                      resetValues={resetValues}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div>{}</div>
+            )}
+          </div>
         )}
-      </>
+      </div>
     );
 };
 
