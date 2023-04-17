@@ -199,7 +199,7 @@ contract Storage {
     function getOwnedFolders(
         address _user
     ) external view returns (string[] memory) {
-        return sharedFile[_user];
+        return sharedFolder[_user];
     }
 
     receive() external payable {}
