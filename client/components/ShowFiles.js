@@ -11,12 +11,14 @@ const ShowFiles = ({ fetchedFiles,getProviderOrSigner }) => {
     const [decodedFile, setDecodeFile] = useState([]);
     const type = "files";
     const getFileType = (filename) => {
+        console.log(filename);
+        
         let ind = filename.lastIndexOf(".");
         let type = filename.slice(ind + 1);
         return type;
     };
     useEffect(() => {
-        // console.log(fetchedFiles.length);
+        console.log(fetchedFiles.length);
     }, []);
     return (
         <div className="grid_folder">

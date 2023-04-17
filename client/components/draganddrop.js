@@ -4,7 +4,7 @@ import { HomeUploadFile, UploadFile } from "../feat/upload";
 import { useRouter } from "next/router";
 import { useModalUploadFileStore } from "@/store/modal_store";
 import { useLoaderModal } from "@/store/modal_store";
-
+import { UpdateLoaderbuttonShow } from "./Loader";
 const DropFileInput = ({ getProviderOrSigner }) => {
   const wrapperRef = useRef(null);
   const router = useRouter();
@@ -19,6 +19,7 @@ const DropFileInput = ({ getProviderOrSigner }) => {
   }));
 
   const [fileList, setFileList] = useState([]);
+  const [load, setLoad] = useState(false)
 
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
 
@@ -41,17 +42,20 @@ const DropFileInput = ({ getProviderOrSigner }) => {
   };
 
   const uploadFile = () => {
+    setLoad(true)
     const { cid } = router.query;
     if (cid === undefined) {
       HomeUploadFile(fileList, getProviderOrSigner).then(res=>{console.log(res);
         setFileList([]);
         closeUploadModal();
+        setLoad(false)
         setConst1()
       })
     } else {
       UploadFile(fileList,cid,getProviderOrSigner).then(res=>{console.log(res);
         setFileList([]);
         closeUploadModal();
+        setLoad(false)
         setConst2();
       })
     }
@@ -60,7 +64,7 @@ const DropFileInput = ({ getProviderOrSigner }) => {
   };
 
   return (
-    <>
+    <div>
       <div className="bg-[#F4F8FD]">
         <div
           ref={wrapperRef}
@@ -88,12 +92,22 @@ const DropFileInput = ({ getProviderOrSigner }) => {
         {fileList.length > 0 ? (
           <div>
             <div>
-              <button
-                className="p-4 bg-blue-600 text-white rounded-md text-md"
-                onClick={uploadFile}
-              >
-                Upload
-              </button>
+              <div className="text-center mt-[1rem] mb-[1rem]">
+                {load ? (
+                  <div className="flex justify-center">
+                    <UpdateLoaderbuttonShow />
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      className="p-4 bg-blue-600 text-white rounded-md text-md"
+                      onClick={uploadFile}
+                    >
+                      Upload
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="mt-10">
               <div className="grid grid-cols-3">
@@ -124,7 +138,7 @@ const DropFileInput = ({ getProviderOrSigner }) => {
           </div>
         ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

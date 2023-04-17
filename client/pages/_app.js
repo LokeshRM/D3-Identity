@@ -8,6 +8,8 @@ import { useRef } from "react";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import blockchain from "../public/blockchain.svg"
+
 import {
   useModalUploadFileStore,
   useCreateFolderStore,
@@ -20,6 +22,8 @@ import {
   ShareDataModal,
   SharedWithModal,
 } from "../components/Modal";
+import { Typography } from "@mui/material";
+import Image from "next/image";
 
 export default function App({ Component, pageProps }) {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -89,7 +93,7 @@ export default function App({ Component, pageProps }) {
       <CreateFolderModal getProviderOrSigner={getProviderOrSigner} />
       <OpenDeleteModal getProviderOrSigner={getProviderOrSigner} />
       <ShareDataModal getProviderOrSigner={getProviderOrSigner} />
-      <SharedWithModal getProviderOrSigner={getProviderOrSigner}/>
+      <SharedWithModal getProviderOrSigner={getProviderOrSigner} />
 
       <div className="">
         <Navbar
@@ -102,8 +106,8 @@ export default function App({ Component, pageProps }) {
           }}
         />
       </div>
-      {walletConnected && (
-        <>
+      {walletConnected ? (
+        <div>
           <div className="grid grid-cols-5 gap-3 bg-[#F3F4F7]   ">
             <div className="h-[100vh] bg-[#FFFFFF] pt-4 pl-4  ">
               <div
@@ -113,7 +117,7 @@ export default function App({ Component, pageProps }) {
                 <Button
                   variant="outlined"
                   size="large"
-                  sx={{
+                  style={{
                     paddingTop: "1rem",
                     paddingBottom: "1rem",
                     paddingRight: "1.5rem",
@@ -154,7 +158,7 @@ export default function App({ Component, pageProps }) {
               </div>
               <div className="h-[0.8px] bg-blue-200 mt-1 mr-4 "></div>
             </div>
-            <div className="h-[100vh]  col-span-4  ">
+            <div className="h-[100vh] max-h-[86vh] overflow-y-scroll col-span-4  ">
               <Component
                 key={router.asPath}
                 {...pageProps}
@@ -162,7 +166,26 @@ export default function App({ Component, pageProps }) {
               />
             </div>
           </div>
-        </>
+        </div>
+      ) : (
+        <div>
+          <div className="grid grid-cols-2 gap-4 h-[70vh]">
+            <div className="flex justify-center items-center flex-col p-[20px]">
+              <Typography variant="h3" sx={{ margin: "3rem" }}>
+                Digital Identity Management
+              </Typography>
+              <p className="text-center">
+                Revolutionizing Digital Identity Management: A Decentralized
+                Solution Empowering Users to Securely Control and Manage their
+                Personal Data, Documents, Files, and Pictures without Dependence
+                on Centralized Intermediaries
+              </p>
+            </div>
+            <div className="flex justify-center items-center flex-col p-[20px]">
+              <Image src={blockchain} alt="" width="400" />
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
