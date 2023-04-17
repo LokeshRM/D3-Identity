@@ -36,7 +36,7 @@ body {
 .grid_folder_contain{
   grid-column: 2/3;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 

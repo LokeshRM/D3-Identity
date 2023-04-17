@@ -254,7 +254,11 @@ const CreateFolderModal = ({ getProviderOrSigner }) => {
                   </div>
                 ) : (
                   <div>
-                    <Button variant="contained" onClick={createFolder}>
+                    <Button
+                      variant="contained"
+                      onClick={createFolder}
+                      style={{ backgroundColor: "blue" }}
+                    >
                       <AddIcon />
                     </Button>
                   </div>
@@ -383,13 +387,13 @@ const ShareDataModal = ({getProviderOrSigner})=>{
         aria-describedby="modal-modal-description"
       >
         <Box sx={style3} className="no-scroll ">
-          <div className="m-3">
-            <p>Share File</p>
+          <div className="m-3 text-center">
+            <Typography variant="h5">Share File</Typography>
           </div>
           <div className="flex items-center">
             <TextField
               id="outlined-basic"
-              label="Outlined"
+              label="User Id"
               variant="outlined"
               name="input"
               value={input}
@@ -400,7 +404,7 @@ const ShareDataModal = ({getProviderOrSigner})=>{
             {input.length > 0 ? (
               <div>
                 <div>
-                  <Button variant="contained" onClick={() => shareData()}>
+                  <Button variant="contained" onClick={() => shareData()} style={{backgroundColor:"blue"}}>
                     <SendIcon />
                   </Button>
                 </div>
@@ -447,20 +451,30 @@ const SharedWithModal = ({getProviderOrSigner})=>{
     <div>
       <Modal
         open={openSharedWithStore}
-        onClose={()=>{setCloseSharedWithModal();
-        setuserList([])}}
+        onClose={() => {
+          setCloseSharedWithModal();
+          setuserList([]);
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style3} className="no-scroll ">
-          <div className="m-3">
-            <p>Share File</p>
+          <div className="m-3 text-center">
+            <Typography variant="h5">Users Given Access</Typography>
           </div>
           <div className="flex justify-center items-center	flex-col">
-          <button onClick={fetchDataofSharedWith} className="p-4 bg-blue-600 hover:bg-blue-400">Refresh</button>
-            {userList && userList.map((user) => {
-              return <UserListIterator user={user} />;
-            })} 
+            <Button
+              onClick={fetchDataofSharedWith}
+              variant="contained"
+              sx={{ padding: "1rem", margin: "1rem" }}
+              style={{ backgroundColor: "blue" }}
+            >
+              Refresh
+            </Button>
+            {userList &&
+              userList.map((user) => {
+                return <UserListIterator user={user} />;
+              })}
           </div>
         </Box>
       </Modal>

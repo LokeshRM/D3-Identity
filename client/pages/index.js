@@ -13,6 +13,8 @@ import { getFilesSharedMe, getFoldersSharedMe } from "@/feat/helper";
 export default function Home(props) {
     const [fetchedFiles, setfetchfiles] = useState([]);
     const [fetchedFolders, setfetchfolders] = useState([]);
+    const [sharedFiles, setSharedFiles] = useState([])
+    const [sharedFolders, setSharedFolders] = useState([])
     const [state, setState] = useState(false);
     const [stateFolder, setStateFolder] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
@@ -104,10 +106,10 @@ export default function Home(props) {
             console.log("printing new Array",newArray);
             setfetchfiles(newArray)
 
-            // just checking values are changing or not in real time global storage
-            setFiles(newArray)
-            // logging out
-            console.log("printing global storage", files)
+            // // just checking values are changing or not in real time global storage
+            // setFiles(newArray)
+            // // logging out
+            // console.log("printing global storage", files)
 
             setTimeout(()=>{
                 setState(true)
@@ -144,9 +146,61 @@ export default function Home(props) {
         if (walletConnected) {
                 getFiles();
                 getFolders() 
+                getFilesShared()
+                getFoldersShared()
                 
         }
     }, [walletConnected,props.render]);
+
+    const getFilesShared = async () => {
+      const signer = await getProviderOrSigner(true);
+       getFilesSharedMe(getProviderOrSigner).then(
+        (res) => {
+          const newArray = [];
+          if (res) {
+            res.forEach((cid) => {
+              getFile(cid).then((val) => {
+                newArray.push(val[0]);
+              });
+            });
+          }
+          console.log("printing new Array", newArray);
+          setSharedFiles(newArray);
+          setTimeout(() => {
+            setStateFolder(true);
+            console.log("sharedFiles",sharedFiles)
+            console.log("sharedFolder",sharedFolders)
+          }, 2000);
+      
+        }
+      );
+    };
+
+    const getFoldersShared = async () => {
+      const signer = await getProviderOrSigner(true);
+     getFoldersSharedMe(getProviderOrSigner).then(
+        (res) => {
+          const newArray = [];
+          console.log(res);
+          if (res) {
+            res.forEach((cid) => {
+              getFolder(cid).then((val) => {
+                console.log(val);
+                newArray.push(val);
+              });
+            });
+          }
+          // console.log(newArray);
+          setSharedFolders(newArray);
+          setTimeout(() => {
+            setStateFolder(true);
+          }, 2000);
+        }
+      );
+    };
+
+
+    
 
     return (
       <div>
@@ -178,17 +232,33 @@ export default function Home(props) {
               </div>
             ) : (
               <div>
-                {
-                  <button
-                    className="p-4 bg-blue-500 hover:bg-blue-300"
-                    onClick={() => {
-                      getFilesSharedMe(getProviderOrSigner);
-                      getFoldersSharedMe(getProviderOrSigner);
-                    }}
-                  >
-                    GET files in
-                  </button>
-                }
+                <div>
+                  <div>
+                    {state && sharedFiles.length > 0 ? (
+                      <ShowFiles
+                        fetchedFiles={sharedFiles}
+                        getProviderOrSigner={getProviderOrSigner}
+                      />
+                    ) : (
+                      <div className="text-center m-3 text-xl ">
+                        You don't have any shared Files!!
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    {stateFolder && sharedFolders.length > 0 ? (
+                      <ShowFolder
+                        fetchedFolders={sharedFolders}
+                        resetValues={resetValues}
+                        getProviderOrSigner={getProviderOrSigner}
+                      />
+                    ) : (
+                      <div className="text-center m-3 text-xl  ">
+                        You don't have any shared Folder!!
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
