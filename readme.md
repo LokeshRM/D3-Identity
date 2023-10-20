@@ -51,7 +51,7 @@ To use the application, follow these steps:
 3. Specify access control for the file and revoke access at any time
 4. Download files by requesting the file hash through the frontend, which retrieves the metadata from the Ethereum smart contract and uses the IPFS hash to retrieve the file data from IPFS.
 
-## Vedio Description
+## Video Description
 Link-> https://www.youtube.com/embed/DYUjfQajAhY
 
 #### Screenshot of the user interface for our application:
