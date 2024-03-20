@@ -1,6 +1,11 @@
 import { Web3Storage } from "web3.storage";
 import { providers, Contract } from "ethers";
 import { abi, address } from "@/contract";
+import "dotenv/config";
+import FormData from "form-data";
+import axios from "axios";
+
+const JWT = "";
 const web3storage_key =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDMxMjBjZWQxZTY5NjFBNDVhRmQwMTBGMzNkQ0MwOUMzNEE5ODhEZTAiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODE1NTM5NDAzNzQsIm5hbWUiOiJnZXRmaWxlIn0.B2zq3OPm1_YWEdxPdeuDpv1AsLZ5DiB6klTBO5TKLZQ";
 
@@ -23,9 +28,21 @@ function makeFileObjects(name) {
 export const HomeUploadFile = async (file, getProviderOrSigner) => {
     try {
         console.log("Uploading files to IPFS with web3.storage....");
-        const client = MakeStorageClient();
-        const cid = await client.put(file);
-        console.log("cid", cid);
+        const formData = new FormData();
+        formData.append("file", file[0]);
+
+        const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+
+        const response = await axios.post(url, formData, {
+            maxContentLength: "Infinity",
+            headers: {
+                Authorization: `Bearer ${JWT}`,
+            },
+        });
+
+        // const client = MakeStorageClient();
+        // const cid = await client.put(file);
+        const cid = response.data.IpfsHash;
         const signer = await getProviderOrSigner(true);
         const contract = new Contract(address, abi, signer);
         const tx = await contract.addFile(cid, await signer.getAddress());
@@ -40,16 +57,28 @@ export const HomeUploadFile = async (file, getProviderOrSigner) => {
 export const HomeUploadFolder = async (folder, getProviderOrSigner) => {
     try {
         console.log("Uploading files to IPFS with web3.storage....");
-        const client = MakeStorageClient();
-        const file = makeFileObjects(folder);
-        const cid = await client.put(file);
-        console.log("cid", cid);
+        // const client = MakeStorageClient();
+        // const file = makeFileObjects(folder);
+        // const cid = await client.put(file);
+        const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+        let body = {
+            pinataContent: { folder_name: folder },
+            pinataMetadata: { name: "folder.json" },
+            pinataOptions: { cidVersion: 1 },
+        };
+        const response = await axios.post(url, body, {
+            headers: {
+                Authorization: `Bearer ${JWT}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const cid = response.data.IpfsHash;
         const signer = await getProviderOrSigner(true);
         const contract = new Contract(address, abi, signer);
         const tx = await contract.addFolder(cid, await signer.getAddress());
         await tx.wait();
         console.log("done uploaded folder !");
-        return true;
+        return cid;
     } catch (err) {
         console.log(err);
     }
@@ -58,8 +87,19 @@ export const HomeUploadFolder = async (folder, getProviderOrSigner) => {
 export const UploadFile = async (file, folder, getProviderOrSigner) => {
     try {
         console.log("Uploading files to IPFS with web3.storage....");
-        const client = MakeStorageClient();
-        const cid = await client.put(file);
+        const formData = new FormData();
+        formData.append("file", file[0]);
+
+        const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+
+        const response = await axios.post(url, formData, {
+            maxContentLength: "Infinity",
+            headers: {
+                Authorization: `Bearer ${JWT}`,
+            },
+        });
+        const cid = response.data.IpfsHash;
+
         console.log("cid", cid);
         const signer = await getProviderOrSigner(true);
         const contract = new Contract(address, abi, signer);
@@ -75,9 +115,19 @@ export const UploadFile = async (file, folder, getProviderOrSigner) => {
 export const UploadFolder = async (folder, parent, getProviderOrSigner) => {
     try {
         console.log("Uploading files to IPFS with web3.storage....");
-        const client = MakeStorageClient();
-        const file = makeFileObjects(folder);
-        const cid = await client.put(file);
+        const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+        let body = {
+            pinataContent: { folder_name: folder },
+            pinataMetadata: { name: "folder.json" },
+            pinataOptions: { cidVersion: 1 },
+        };
+        const response = await axios.post(url, body, {
+            headers: {
+                Authorization: `Bearer ${JWT}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const cid = response.data.IpfsHash;
         console.log("cid", cid);
         const signer = await getProviderOrSigner(true);
         const contract = new Contract(address, abi, signer);
